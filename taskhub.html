@@ -1,0 +1,2751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#f97316" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="CNHS Hub" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<title>PerformanceTask Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-0:#fef3e2;
+  --bg-1:#fff7ed;
+  --bg-2:#ffedd5;
+  --bg-3:#fed7aa;
+  --ink:#0f172a;
+  --ink-dim:#1e293b;
+  --ink-faint:#475569;
+  --line:rgba(15,23,42,0.08);
+  --line-2:rgba(15,23,42,0.14);
+  --line-3:rgba(15,23,42,0.22);
+  --card:#ffffff;
+  --card-2:#fffbf5;
+  --card-hover:#fef3e2;
+  --orange:#f97316;
+  --orange-d:#ea580c;
+  --orange-dd:#9a3412;
+  --orange-l:#fb923c;
+  --orange-ll:#fed7aa;
+  --orange-glow:rgba(249,115,22,.35);
+  --navy:#0a1440;
+  --navy-l:#1e3a8a;
+  --blue:#2563eb;
+  --blue-l:#60a5fa;
+  --amber:#fbbf24;
+  --amber-l:#fde68a;
+  --accent:var(--orange);
+  --accent-2:var(--blue);
+  --accent-3:var(--amber);
+  --ok:#10b981;
+  --ok-l:#34d399;
+  --warn:#f59e0b;
+  --err:#ef4444;
+  --grad-1:linear-gradient(135deg,#f97316 0%,#ea580c 40%,#2563eb 100%);
+  --grad-2:linear-gradient(135deg,#fbbf24 0%,#f97316 50%,#1e3a8a 100%);
+  --grad-orange:linear-gradient(135deg,#f97316 0%,#ea580c 100%);
+  --grad-navy:linear-gradient(135deg,#1e3a8a 0%,#0a1440 100%);
+  --shadow-sm:0 2px 8px -2px rgba(15,23,42,.08);
+  --shadow-md:0 10px 30px -10px rgba(15,23,42,.15);
+  --shadow-lg:0 20px 50px -12px rgba(15,23,42,.18),0 0 0 1px rgba(15,23,42,.04);
+  --shadow-orange:0 10px 30px -8px rgba(249,115,22,.55),0 0 0 1px rgba(249,115,22,.12);
+  --shadow-blue:0 10px 30px -8px rgba(37,99,235,.55),0 0 0 1px rgba(37,99,235,.12);
+  --shadow-inset:none;
+  --radius-lg:22px;
+  --radius-md:14px;
+  --radius-sm:10px;
+  --radius-xs:7px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --eout:cubic-bezier(.16,1,.3,1);
+  --espring:cubic-bezier(.2,1.2,.3,1);
+  --font-serif:'Inter',system-ui,-apple-system,sans-serif;
+  --font-body:'Inter',system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+html,body{height:100%;max-width:100%;overflow-x:hidden}
+body{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:var(--bg-0);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.55;
+  font-size:14.5px;
+  letter-spacing:-.003em;
+}
+.bg-mesh{position:fixed;inset:0;z-index:-2;overflow:hidden;background:
+  radial-gradient(1400px 900px at 10% 0%,rgba(249,115,22,.18),transparent 60%),
+  radial-gradient(1100px 800px at 100% 10%,rgba(37,99,235,.10),transparent 60%),
+  radial-gradient(900px 700px at 50% 100%,rgba(251,191,36,.14),transparent 60%),
+  linear-gradient(180deg,#fef3e2 0%,#fff7ed 50%,#ffedd5 100%);
+}
+.bg-mesh::before,.bg-mesh::after{
+  content:'';position:absolute;inset:-20%;
+  background:
+    radial-gradient(400px 400px at 20% 30%,rgba(249,115,22,.12),transparent 70%),
+    radial-gradient(500px 500px at 80% 70%,rgba(59,130,246,.10),transparent 70%);
+  filter:blur(40px);
+  animation:drift 22s ease-in-out infinite alternate;
+}
+.bg-mesh::after{animation-duration:28s;animation-direction:alternate-reverse;opacity:.6}
+@keyframes drift{
+  0%{transform:translate(0,0) rotate(0deg)}
+  50%{transform:translate(3%,-2%) rotate(4deg)}
+  100%{transform:translate(-2%,2%) rotate(-3deg)}
+}
+.bg-grid{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(rgba(15,23,42,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(15,23,42,.03) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%);
+}
+h1,h2,h3,h4{font-family:'Inter',system-ui,sans-serif;letter-spacing:-.02em;font-weight:700}
+.mono{font-family:'JetBrains Mono',monospace}
+.grad-text{background:var(--grad-1);-webkit-background-clip:text;background-clip:text;color:transparent}
+.muted{color:var(--ink-dim)}
+.faint{color:var(--ink-faint)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:12px;font-weight:500;color:var(--ink-dim);white-space:nowrap}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;min-width:0}
+.field label{font-size:12px;font-weight:600;color:var(--ink-dim);letter-spacing:.04em;text-transform:uppercase}
+.input,.textarea,.select{
+  width:100%;max-width:100%;background:#fff;color:var(--ink);
+  border:1px solid var(--line);border-radius:var(--radius-sm);
+  padding:12px 14px;font:inherit;font-size:14px;
+  transition:all .25s cubic-bezier(.2,.8,.2,1);
+  box-shadow:none;
+  outline:none;
+}
+.input:hover,.textarea:hover,.select:hover{border-color:var(--orange-l);background:#fffbf5}
+.input:focus,.textarea:focus,.select:focus{
+  border-color:rgba(249,115,22,.7);
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(249,115,22,.18);
+}
+.textarea{min-height:96px;resize:vertical;font-family:inherit}
+.select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%23475569' d='M6 8L0 0h12z'/></svg>");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+
+.btn{
+  --btn-bg:#ffffff;
+  --btn-color:var(--ink);
+  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 18px;border-radius:var(--radius-sm);font:inherit;font-weight:600;font-size:14px;
+  background:var(--btn-bg);color:var(--btn-color);border:1px solid var(--line-2);
+  cursor:pointer;overflow:hidden;user-select:none;
+  flex-shrink:0;white-space:nowrap;text-overflow:clip;min-width:fit-content;
+  transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .25s,background .25s,border-color .25s;
+  box-shadow:0 2px 0 rgba(15,23,42,.06),0 6px 18px -6px rgba(15,23,42,.18);
+}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 4px 0 rgba(15,23,42,.08),0 14px 30px -10px rgba(249,115,22,.30)}
+.btn:active{transform:translateY(1px);filter:brightness(.96);box-shadow:inset 0 2px 4px rgba(15,23,42,.10)}
+.btn.primary{--btn-bg:linear-gradient(135deg,#f97316,#ea580c);--btn-color:#fff;border-color:rgba(249,115,22,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 3px 0 #9a3412,0 12px 30px -8px rgba(249,115,22,.6)}
+.btn.primary:hover{filter:brightness(1.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 5px 0 #9a3412,0 18px 40px -10px rgba(249,115,22,.75)}
+.btn.cyan{--btn-bg:linear-gradient(135deg,#3b82f6,#1d4ed8);--btn-color:#fff;border-color:rgba(59,130,246,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 3px 0 #1e3a8a,0 12px 30px -8px rgba(59,130,246,.55)}
+.btn.cyan:hover{filter:brightness(1.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 5px 0 #1e3a8a,0 18px 40px -10px rgba(59,130,246,.7)}
+.btn.ok{--btn-bg:linear-gradient(135deg,#10e5a2,#059669);--btn-color:#042;border-color:rgba(16,229,162,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 3px 0 #065f46,0 12px 30px -8px rgba(16,229,162,.55)}
+.btn.ok:hover{filter:brightness(1.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 5px 0 #065f46,0 18px 40px -10px rgba(16,229,162,.7)}
+.btn.err{--btn-bg:linear-gradient(135deg,#ff5c7a,#be123c);--btn-color:#fff;border-color:rgba(255,92,122,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 3px 0 #881337,0 12px 30px -8px rgba(255,92,122,.55)}
+.btn.err:hover{filter:brightness(1.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 5px 0 #881337,0 18px 40px -10px rgba(255,92,122,.7)}
+.btn.ghost{background:transparent;border:1px solid var(--line-2);box-shadow:none}
+.btn.ghost:hover{background:#fff7ed;border-color:var(--orange-l);box-shadow:0 8px 18px -10px rgba(15,23,42,.18)}
+/* Default (unstyled) button gets a cream hover, but colored variants keep their gradient */
+.btn:not(.primary):not(.cyan):not(.ok):not(.err):not(.ghost):not(.navy):hover{background:#fff7ed;border-color:var(--orange-l)}
+.btn.sm{padding:7px 12px;font-size:12.5px;border-radius:8px}
+.btn.lg{padding:14px 24px;font-size:15px;border-radius:12px}
+.btn .ripple{position:absolute;border-radius:50%;transform:scale(0);animation:ripple .6s linear;background:rgba(255,255,255,.35);pointer-events:none}
+@keyframes ripple{to{transform:scale(4);opacity:0}}
+
+.glass{
+  background:linear-gradient(180deg,#ffffff,#fffbf5);
+  border:1px solid var(--line-2);border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-md);
+  position:relative;overflow:hidden;
+}
+.glass::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(135deg,rgba(249,115,22,.05),transparent 50%);opacity:.7}
+
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative}
+.login-card{width:100%;max-width:460px;padding:38px 30px;border-radius:28px;position:relative;z-index:2;animation:riseIn .8s cubic-bezier(.2,.8,.2,1)}
+@keyframes riseIn{from{opacity:0;transform:translateY(30px) scale(.96)}to{opacity:1;transform:none}}
+.logo-row{display:flex;align-items:center;gap:12px;margin-bottom:22px;min-width:0}
+.logo-mark{width:46px;height:46px;border-radius:14px;background:var(--grad-1);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 30px -10px rgba(249,115,22,.6);position:relative;overflow:hidden;flex-shrink:0}
+.logo-mark::after{content:'';position:absolute;inset:0;background:conic-gradient(from 0deg,transparent,rgba(255,255,255,.4),transparent);animation:spin 4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.logo-mark svg{position:relative;z-index:2}
+.brand{min-width:0;flex:1}
+.brand h1{font-size:22px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand .tag{font-size:11px;color:var(--ink-faint);letter-spacing:.16em;text-transform:uppercase;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.role-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:5px;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;margin-bottom:22px;position:relative}
+.role-tab{padding:10px 6px;font-size:12.5px;font-weight:600;text-align:center;border-radius:8px;cursor:pointer;color:#9a3412;transition:all .3s;position:relative;z-index:2;border:none;background:transparent;font-family:inherit}
+.role-tab.active{color:#fff;background:var(--grad-1);box-shadow:0 6px 20px -6px rgba(249,115,22,.5)}
+.role-tab:hover:not(.active){color:#7c2d12;background:#fed7aa}
+
+.login-title{font-size:24px;margin-bottom:4px}
+.login-sub{color:var(--ink-dim);font-size:13.5px;margin-bottom:22px}
+.err-msg{color:var(--err);font-size:12.5px;margin-top:-8px;margin-bottom:10px;min-height:16px}
+.login-foot{text-align:center;margin-top:18px;font-size:11.5px;color:var(--ink-faint);letter-spacing:.1em;text-transform:uppercase}
+
+#app{display:none;min-height:100vh}
+.topbar{position:sticky;top:0;z-index:40;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);background:rgba(255,247,237,.92);border-bottom:1px solid var(--line-2);display:flex;align-items:center;gap:10px;padding:10px 16px;box-shadow:0 4px 20px -8px rgba(15,23,42,.08)}
+.topbar .logo-row{margin:0;max-width:180px}
+.topbar .brand h1{font-size:16px}
+.topbar .brand .tag{font-size:10px}
+.spacer{flex:1;min-width:8px}
+.user-chip{display:flex;align-items:center;gap:10px;padding:5px 5px 5px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);min-width:0}
+.user-chip .meta{min-width:0;overflow:hidden}
+.user-chip .name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+.user-chip .role-badge{font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.1em}
+.user-chip .avatar{width:30px;height:30px;border-radius:50%;background:var(--grad-2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#0a0a0a;flex-shrink:0}
+
+.shell{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 58px)}
+.side{padding:20px 14px;border-right:1px solid var(--line-2);background:#fffbf5;position:sticky;top:58px;height:calc(100vh - 58px);overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:var(--ink-dim);font-weight:500;font-size:13.5px;cursor:pointer;margin-bottom:4px;transition:all .25s;border:1px solid transparent;background:transparent;width:100%;font-family:inherit;text-align:left}
+.nav-item:hover{color:var(--ink);background:#fff7ed}
+.nav-item.active{color:#fff;background:linear-gradient(135deg,#f97316,#ea580c);border-color:#ea580c;box-shadow:0 8px 24px -8px rgba(249,115,22,.45)}
+.nav-item svg{flex-shrink:0}
+.side .group-label{font-size:10.5px;color:var(--ink-faint);letter-spacing:.16em;text-transform:uppercase;padding:14px 12px 8px;font-weight:700}
+
+.main{padding:22px 24px 60px;overflow-x:hidden;min-width:0}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.page-head h2{font-size:26px;line-height:1.1}
+.page-head p{color:var(--ink-dim);font-size:13.5px;margin-top:4px}
+.page-head .actions{display:flex;gap:8px;flex-wrap:wrap}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:22px}
+.stat{padding:16px 18px;border-radius:var(--radius-md);position:relative;overflow:hidden}
+.stat .v{font-size:26px;font-weight:800;font-family:'Inter';line-height:1.1}
+.stat .l{font-size:11.5px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-top:4px}
+.stat .icon{position:absolute;right:14px;top:14px;width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#fff;font-size:14px}
+
+.table-wrap{border-radius:var(--radius-lg);border:1px solid var(--line);background:var(--card);overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.data{width:100%;border-collapse:collapse;font-size:13px;min-width:480px}
+table.data th{text-align:left;font-weight:600;padding:12px 14px;color:var(--ink-dim);background:#fff;border-bottom:1px solid var(--line);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+table.data td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.data tr:last-child td{border-bottom:none}
+table.data tr:hover td{background:#fff7ed}
+.empty{padding:48px 20px;text-align:center;color:var(--ink-faint);font-size:14px}
+.empty .ico{font-size:38px;margin-bottom:8px;opacity:.5}
+
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.act-card{padding:18px;border-radius:var(--radius-md);cursor:pointer;transition:all .3s cubic-bezier(.2,.8,.2,1);position:relative;overflow:hidden}
+.act-card:hover{transform:translateY(-4px);border-color:rgba(249,115,22,.4);box-shadow:0 20px 50px -15px rgba(249,115,22,.4)}
+.act-card .ribbon{position:absolute;top:0;right:0;width:70px;height:70px;opacity:.15;background:var(--grad-1);filter:blur(30px)}
+.act-card h4{font-size:15.5px;margin-bottom:6px;position:relative}
+.act-card .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;position:relative}
+.act-card .desc{font-size:13px;color:var(--ink-dim);margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;position:relative}
+.score-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:linear-gradient(135deg,rgba(16,229,162,.15),rgba(59,130,246,.15));border:1px solid rgba(16,229,162,.35);font-size:12px;font-weight:700;color:var(--ok);white-space:nowrap}
+
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity .32s cubic-bezier(.2,.8,.2,1)}
+.modal-bg.show{display:flex;opacity:1}
+.modal{width:100%;max-width:620px;max-height:90vh;overflow-y:auto;padding:26px 28px;border-radius:24px;position:relative;transform:translateY(24px) scale(.96);opacity:0;transition:transform .42s cubic-bezier(.16,1.2,.24,1),opacity .32s cubic-bezier(.2,.8,.2,1);border:1.5px solid #fed7aa;background:linear-gradient(180deg,#ffffff,#fffbf5);box-shadow:0 40px 80px -20px rgba(15,23,42,.18),0 0 0 1px rgba(249,115,22,.10)}
+.modal-bg.show .modal{transform:translateY(0) scale(1);opacity:1}
+.modal.wide{max-width:900px}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(249,115,22,.6),rgba(59,130,246,.6),rgba(251,191,36,.6),transparent);opacity:.9;border-radius:24px 24px 0 0}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line-2)}
+.modal h3{font-size:20px;line-height:1.2}
+.modal .close{background:#fff;border:1px solid var(--line);width:34px;height:34px;min-width:34px;border-radius:10px;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:18px;transition:.25s;flex-shrink:0;padding:0;font-family:inherit}
+.modal .close:hover{background:rgba(255,92,122,.15);border-color:rgba(255,92,122,.4);color:var(--err);transform:rotate(90deg)}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;align-items:center;margin-top:22px;padding-top:16px;border-top:1px solid var(--line-2);flex-wrap:wrap}
+.modal-foot .btn{flex-shrink:0}
+
+.toast-wrap{position:fixed;bottom:20px;right:16px;left:16px;z-index:200;display:flex;flex-direction:column;gap:10px;align-items:flex-end;pointer-events:none}
+.toast{min-width:240px;max-width:380px;padding:14px 18px;border-radius:14px;background:#ffffff;border:1.5px solid var(--line-2);color:var(--ink);font-size:13.5px;box-shadow:0 24px 50px -12px rgba(15,23,42,.18);animation:toastIn .45s cubic-bezier(.16,1.2,.24,1);display:flex;gap:12px;align-items:flex-start;pointer-events:auto}
+.toast.ok{border-color:rgba(16,229,162,.5);box-shadow:0 24px 50px -12px rgba(16,229,162,.25),0 0 0 1px rgba(16,229,162,.2)}
+.toast.err{border-color:rgba(255,92,122,.5);box-shadow:0 24px 50px -12px rgba(255,92,122,.25),0 0 0 1px rgba(255,92,122,.2)}
+.toast .ic{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.toast.ok .ic{background:rgba(16,229,162,.22);color:var(--ok);box-shadow:0 0 12px rgba(16,229,162,.4)}
+.toast.err .ic{background:rgba(255,92,122,.22);color:var(--err);box-shadow:0 0 12px rgba(255,92,122,.4)}
+.toast.info .ic{background:rgba(59,130,246,.22);color:var(--accent-2);box-shadow:0 0 12px rgba(59,130,246,.4)}
+@keyframes toastIn{from{transform:translateX(60px) scale(.92);opacity:0}60%{transform:translateX(-4px) scale(1.02)}to{transform:translateX(0) scale(1);opacity:1}}
+
+.confirm-modal{max-width:440px;padding:0;overflow:hidden}
+.confirm-hero{padding:30px 28px 22px;text-align:center;position:relative;overflow:hidden}
+.confirm-hero::before{content:'';position:absolute;inset:-50% 20%;background:radial-gradient(ellipse at center,var(--hero-glow,rgba(255,92,122,.35)) 0%,transparent 65%);opacity:.7;filter:blur(32px);animation:glowPulse 3s ease-in-out infinite alternate}
+@keyframes glowPulse{to{transform:scale(1.2);opacity:.9}}
+.confirm-icon{width:76px;height:76px;margin:0 auto 16px;border-radius:50%;background:var(--hero-bg,linear-gradient(135deg,#ff5c7a,#be123c));display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 12px 40px -8px var(--hero-shadow,rgba(255,92,122,.6)),inset 0 1px 0 rgba(255,255,255,.3);animation:iconPop .55s cubic-bezier(.2,1.5,.4,1)}
+@keyframes iconPop{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+.confirm-icon::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--hero-ring,rgba(255,92,122,.4));animation:iconRing 2.2s ease-out infinite}
+@keyframes iconRing{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.5);opacity:0}}
+.confirm-icon svg{width:38px;height:38px;position:relative;z-index:2}
+.confirm-hero h3{font-size:22px;font-family:'Inter';font-weight:700;margin-bottom:6px;position:relative}
+.confirm-hero p{font-size:14px;color:var(--ink-dim);line-height:1.55;position:relative;max-width:340px;margin:0 auto}
+.confirm-foot{padding:18px 24px 24px;display:flex;gap:10px;background:#fff7ed;border-top:1px solid var(--line-2)}
+.confirm-foot .btn{flex:1;padding:13px 16px;font-size:14px;min-width:0}
+
+.select:focus,.input:focus,.textarea:focus{transform:translateY(-1px)}
+
+#mobileNav{display:none}
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .side{display:none}
+  .main{padding:16px 14px 96px;min-height:calc(100vh - 58px)}
+  .page-head h2{font-size:22px}
+  #mobileNav{
+    display:flex;position:fixed;bottom:0;left:0;right:0;z-index:50;
+    padding:6px 6px calc(6px + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,rgba(255,251,245,.92),rgba(255,247,237,.98));
+    backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+    border-top:1px solid var(--line-2);
+    box-shadow:0 -12px 30px -10px rgba(15,23,42,.10);
+    overflow-x:auto;gap:2px;scrollbar-width:none;
+  }
+  #mobileNav::-webkit-scrollbar{display:none}
+  #mobileNav .nav-item{
+    flex:1;min-width:72px;max-width:110px;flex-direction:column;gap:3px;
+    padding:8px 6px;font-size:10.5px;font-weight:600;border-radius:12px;
+    white-space:normal;text-align:center;line-height:1.15;margin:0;border:none;background:transparent;
+  }
+  #mobileNav .nav-item.active{background:linear-gradient(180deg,rgba(249,115,22,.22),rgba(59,130,246,.08));border:1px solid rgba(249,115,22,.38);box-shadow:0 8px 20px -8px rgba(249,115,22,.5)}
+  #mobileNav .nav-item svg{width:20px;height:20px}
+  #mobileNav .nav-item span{font-size:10px;display:block;white-space:normal}
+}
+@media (max-width:640px){
+  body{font-size:13.5px}
+  .topbar{padding:9px 12px;gap:8px}
+  .topbar .logo-row{max-width:unset;flex:1;min-width:0}
+  .topbar .brand h1{font-size:15px}
+  .user-chip{padding:4px 4px 4px 10px}
+  .user-chip .name{max-width:80px;font-size:12.5px}
+  .user-chip .role-badge{font-size:9.5px}
+  .user-chip .avatar{width:28px;height:28px;font-size:11px}
+  .pill:not(#syPill){display:none}
+  #syPill{padding:3px 8px;font-size:11px}
+  .main{padding:16px 12px 100px}
+  .page-head h2{font-size:20px}
+  .page-head p{font-size:12.5px}
+  .stats{grid-template-columns:repeat(2,1fr);gap:10px}
+  .stat{padding:14px 14px}
+  .stat .v{font-size:22px}
+  .stat .l{font-size:10.5px}
+  .stat .icon{width:28px;height:28px;top:12px;right:12px}
+  .cards-grid{grid-template-columns:1fr;gap:12px}
+  .rubric-row{grid-template-columns:1fr 80px auto;gap:6px}
+  .grade-row{grid-template-columns:1fr;gap:6px;padding:12px}
+  .modal{padding:22px 20px;border-radius:20px}
+  .modal-head h3{font-size:18px}
+  .login-card{padding:30px 22px}
+  .modal-foot{flex-direction:row;justify-content:stretch}
+  .modal-foot .btn{flex:1;padding:12px 14px;font-size:13.5px;min-width:0}
+  .confirm-hero{padding:26px 22px 18px}
+  .confirm-icon{width:66px;height:66px}
+  .confirm-hero h3{font-size:19px}
+  .confirm-hero p{font-size:13px}
+  .confirm-foot{padding:16px 18px 20px}
+  table.data{font-size:12.5px;min-width:420px}
+  table.data th,table.data td{padding:10px 12px}
+  .btn{padding:10px 14px;font-size:13.5px}
+  .btn.sm{padding:6px 10px;font-size:12px}
+  .btn.lg{padding:12px 20px;font-size:14px}
+  .glass{border-radius:16px}
+  .subject-head{flex-wrap:wrap}
+  .subject-head .meta{margin-left:0;width:100%}
+}
+@media (max-width:420px){
+  .role-tab{font-size:11.5px;padding:9px 4px}
+  .brand h1{font-size:14px}
+  .brand .tag{font-size:9.5px}
+  .stats{grid-template-columns:1fr}
+  #mobileNav .nav-item{min-width:64px;font-size:9.5px}
+  #mobileNav .nav-item span{font-size:9.5px}
+}
+.hidden{display:none!important}
+
+#splash{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;background:var(--bg-0);transition:opacity .5s}
+#splash.hide{opacity:0;pointer-events:none}
+.loader{width:52px;height:52px;border-radius:50%;border:3px solid var(--line-2);border-top-color:var(--accent);border-right-color:var(--accent-2);animation:spin 1s linear infinite}
+.splash-text{font-family:'Inter';letter-spacing:.3em;font-size:11px;color:var(--ink-faint);text-transform:uppercase}
+
+.grade-row{display:grid;grid-template-columns:1fr 110px 1.5fr auto;gap:10px;align-items:center;padding:10px 12px;border-radius:10px;margin-bottom:6px;background:#fff;border:1px solid var(--line)}
+.grade-row:hover{background:#fff}
+.grade-row .s-name{font-weight:600;font-size:13.5px}
+.grade-row .s-lrn{font-size:11px;color:var(--ink-faint);font-family:'JetBrains Mono'}
+
+.fb-block{padding:14px 16px;border-radius:12px;background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(249,115,22,.06));border:1px solid rgba(59,130,246,.25);margin-top:14px}
+.fb-block .h{font-size:11px;color:var(--accent-2);letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+
+.rubric-display{display:flex;justify-content:space-between;padding:8px 12px;background:#fff;border:1px solid var(--line);border-radius:8px;margin-bottom:6px;font-size:13px;gap:10px}
+.rubric-display .pts{font-weight:700;color:var(--accent-2);white-space:nowrap}
+
+.subject-block{margin-bottom:22px}
+.subject-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:10px 14px;border-radius:12px;background:linear-gradient(135deg,rgba(249,115,22,.18),rgba(59,130,246,.1));border:1px solid rgba(249,115,22,.3)}
+.subject-head h3{font-size:16px;letter-spacing:-.01em}
+.subject-head .meta{font-size:11.5px;color:var(--ink-dim);margin-left:auto;white-space:nowrap}
+.quarter-label{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);padding:10px 4px 6px}
+.type-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.type-badge.act{background:rgba(249,115,22,.18);color:#9a3412;border:1px solid rgba(249,115,22,.45)}
+.type-badge.qz{background:rgba(59,130,246,.15);color:#1e3a8a;border:1px solid rgba(59,130,246,.45)}
+
+.install-btn{display:none;padding:7px 12px;font-size:12px;border-radius:10px;background:linear-gradient(135deg,#10e5a2,#059669);color:#042;border-color:rgba(16,229,162,.5);font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 3px 0 #065f46,0 8px 18px -4px rgba(16,229,162,.5);animation:installPulse 2.5s ease-in-out infinite}
+@keyframes installPulse{0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 3px 0 #065f46,0 8px 18px -4px rgba(16,229,162,.5)}50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 3px 0 #065f46,0 12px 28px -4px rgba(16,229,162,.8)}}
+.install-steps{list-style:decimal;padding-left:22px;margin:8px 0 4px;font-size:14px;line-height:1.7;color:var(--ink)}
+.install-steps li{margin-bottom:10px;padding-left:4px}
+.install-steps li::marker{color:var(--accent);font-weight:700}
+.install-note{margin-top:14px;padding:12px 14px;border-radius:12px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);font-size:13px;color:var(--ink-dim);line-height:1.55}
+.ios-icon{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;background:rgba(59,130,246,.2);border:1px solid rgba(59,130,246,.4);font-size:12px;vertical-align:middle;margin:0 2px}
+/* Stylish polish layer — matches hub */
+.brand-title,h1,h2,.page-h1,.hero-title,.serif{font-family:var(--font-serif);letter-spacing:-.022em;font-weight:700}
+.hero-title em,h1 em,h2 em{font-style:italic;font-weight:600;color:var(--orange-d);background:linear-gradient(135deg,#ea580c,#9a3412);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.topbar{backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);background:rgba(255,247,237,.92);border-bottom:1px solid var(--line-2);box-shadow:0 4px 24px -10px rgba(15,23,42,.10)}
+.brand-mark{background:linear-gradient(135deg,#f97316,#ea580c)!important;box-shadow:0 8px 22px -6px rgba(249,115,22,.55),inset 0 1px 0 rgba(255,255,255,.28)!important;position:relative;overflow:hidden}
+.brand-mark::after{content:'';position:absolute;inset:0;background:conic-gradient(from 0deg,transparent,rgba(255,255,255,.35),transparent);animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.card,.class-card,.module-card,.content-card,.glass{background:#ffffff;border:1px solid var(--line-2);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);transition:transform .3s var(--espring),box-shadow .3s var(--ease),border-color .3s}
+.card:hover,.class-card:hover{transform:translateY(-3px);border-color:rgba(249,115,22,.35);box-shadow:var(--shadow-lg),0 0 0 1px rgba(249,115,22,.2)}
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;font:inherit;font-weight:600;font-size:13.5px;font-family:var(--font-body);color:#fff;background:var(--grad-orange);border:none;border-radius:var(--radius-sm);cursor:pointer;outline:none;white-space:nowrap;transition:transform .16s var(--ease),filter .22s,box-shadow .22s var(--ease);box-shadow:0 1px 0 rgba(255,255,255,.32) inset,0 -2px 0 rgba(0,0,0,.15) inset,0 2px 0 var(--orange-dd),0 8px 18px -4px var(--orange-glow);overflow:hidden;letter-spacing:.005em}
+.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.16),transparent 55%);pointer-events:none;border-radius:inherit}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 -2px 0 rgba(0,0,0,.18) inset,0 4px 0 var(--orange-dd),0 14px 30px -6px var(--orange-glow)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.1) inset,0 0 0 var(--orange-dd),0 3px 10px -2px var(--orange-glow)}
+.btn:disabled{opacity:.5;cursor:not-allowed;filter:grayscale(.25);transform:none}
+.btn.sm{padding:7px 12px;font-size:12px;border-radius:8px}
+.btn.lg{padding:13px 22px;font-size:14.5px;border-radius:12px}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line-2);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.btn.ghost:hover{background:#fffbf5;border-color:rgba(249,115,22,.4);color:var(--orange-dd);box-shadow:0 4px 14px -4px rgba(249,115,22,.3)}
+.btn.ghost:active{transform:translateY(1px)}
+.btn.ghost::after{display:none}
+/* Cancel button — clearly readable soft-slate, not competing with primary actions */
+.btn.cancel{background:linear-gradient(180deg,#f1f5f9,#e2e8f0)!important;color:#1e293b!important;border:1.5px solid #cbd5e1!important;box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 -2px 0 rgba(15,23,42,.06) inset,0 2px 0 #94a3b8,0 6px 14px -4px rgba(15,23,42,.15)!important;font-weight:600!important;letter-spacing:.01em!important;padding:10px 22px!important;min-width:96px!important}
+.btn.cancel::after{display:none}
+.btn.cancel:hover{background:linear-gradient(180deg,#e2e8f0,#cbd5e1)!important;color:#0f172a!important;border-color:#94a3b8!important;filter:none!important;box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 -2px 0 rgba(15,23,42,.08) inset,0 4px 0 #94a3b8,0 10px 20px -4px rgba(15,23,42,.2)!important;transform:translateY(-1px)}
+.btn.cancel:active{transform:translateY(1px);box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 0 0 #94a3b8,0 2px 6px rgba(15,23,42,.1)!important}
+.btn.navy{background:var(--grad-navy);box-shadow:0 1px 0 rgba(255,255,255,.22) inset,0 -2px 0 rgba(0,0,0,.25) inset,0 2px 0 #030a24,0 8px 18px -4px rgba(10,20,64,.6)}
+.btn.navy:hover{box-shadow:0 1px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.3) inset,0 4px 0 #030a24,0 14px 30px -6px rgba(10,20,64,.7)}
+.btn.cyan{background:linear-gradient(180deg,#2563eb 0%,#1d4ed8 100%)!important;box-shadow:0 1px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.18) inset,0 2px 0 #1e3a8a,0 8px 18px -4px rgba(37,99,235,.55)!important}
+.btn.cyan:hover{box-shadow:0 1px 0 rgba(255,255,255,.32) inset,0 -2px 0 rgba(0,0,0,.22) inset,0 4px 0 #1e3a8a,0 14px 30px -6px rgba(37,99,235,.65)!important}
+.btn .ripple{position:absolute;border-radius:50%;transform:scale(0);animation:rippleX .62s linear;background:rgba(255,255,255,.45);pointer-events:none}
+@keyframes rippleX{to{transform:scale(4);opacity:0}}
+input,select,textarea,.input{background:#fff;border:1.5px solid var(--line-2);color:var(--ink);border-radius:var(--radius-sm);padding:10px 12px;font-size:14px;font-family:inherit;transition:border-color .2s,background .2s,box-shadow .2s;outline:none}
+input:hover,select:hover,textarea:hover,.input:hover{border-color:var(--line-3)}
+input:focus,select:focus,textarea:focus,.input:focus{border-color:var(--orange);background:#fff;box-shadow:0 0 0 4px rgba(249,115,22,.16)}
+.chip,.pill,.tag,.badge-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:999px;background:#fff;border:1px solid var(--line-2);font-size:11.5px;font-weight:600;color:var(--ink-dim);letter-spacing:.01em}
+.chip.am,.pill.am,.tag.am{background:linear-gradient(135deg,rgba(249,115,22,.2),rgba(234,88,12,.15));border-color:rgba(249,115,22,.4);color:var(--orange-dd)}
+.chip.cy,.pill.cy{background:linear-gradient(135deg,rgba(37,99,235,.18),rgba(29,78,216,.12));border-color:rgba(37,99,235,.4);color:#1e3a8a}
+.section-h,.sh h2,h2.sh{font-family:var(--font-serif);font-weight:600;letter-spacing:-.025em;font-size:28px;line-height:1.1}
+.section-h em,h2.sh em{font-style:italic;font-weight:500}
+.stat-number,.metric-v,.stat-v{font-family:var(--font-serif);font-weight:700;letter-spacing:-.025em}
+.modal{background:linear-gradient(180deg,#ffffff,#fffbf5)!important;border:1.5px solid #fed7aa!important;border-radius:var(--radius-lg)!important;box-shadow:0 40px 80px -20px rgba(15,23,42,.20),0 0 0 1px rgba(249,115,22,.10)!important;color:var(--ink)!important}
+.modal-title,.modal-head{font-family:var(--font-serif);font-weight:600;letter-spacing:-.02em}
+.tab,.nav-item{transition:all .25s var(--ease);position:relative}
+.tab.active::after,.nav-item.active::after{content:'';position:absolute;bottom:-1px;left:12px;right:12px;height:2.5px;background:linear-gradient(90deg,var(--orange),var(--amber));border-radius:3px;box-shadow:0 2px 8px rgba(249,115,22,.5)}
+a{color:var(--orange-d);transition:color .2s}
+a:hover{color:var(--orange)}
+::selection{background:rgba(249,115,22,.45);color:#fff}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#fff}
+::-webkit-scrollbar-thumb{background:rgba(249,115,22,.3);border-radius:10px;border:2px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:rgba(249,115,22,.5);background-clip:padding-box}
+/* GAP Offline Indicator */
+.gap-offline-bar{position:fixed;top:0;left:0;right:0;z-index:9999;padding:8px 16px;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;font-family:'Inter',system-ui,sans-serif;font-size:13px;font-weight:600;display:none;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 12px rgba(220,38,38,.4);animation:gap-banner-slide .35s cubic-bezier(.16,1.2,.24,1)}
+.gap-offline-bar.show{display:flex}
+.gap-offline-bar svg{width:16px;height:16px;flex-shrink:0;animation:gap-pulse 1.4s ease-in-out infinite}
+.gap-offline-bar .gap-pending{background:rgba(0,0,0,.25);padding:3px 8px;border-radius:99px;font-size:11.5px;font-weight:700;letter-spacing:.04em;border:1px solid rgba(255,255,255,.15)}
+.gap-sync-bar{position:fixed;top:0;left:0;right:0;z-index:9999;padding:8px 16px;background:linear-gradient(135deg,#059669,#047857);color:#fff;font-family:'Inter',system-ui,sans-serif;font-size:13px;font-weight:600;display:none;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 12px rgba(5,150,105,.4);animation:gap-banner-slide .35s cubic-bezier(.16,1.2,.24,1)}
+.gap-sync-bar.show{display:flex}
+.gap-sync-bar svg{width:16px;height:16px;flex-shrink:0}
+.gap-sync-bar.fading{opacity:0;transition:opacity .6s ease}
+@keyframes gap-banner-slide{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+@keyframes gap-pulse{0%,100%{opacity:1}50%{opacity:.55}}
+body.gap-banner-active{padding-top:38px}
+
+</style>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+<div class="bg-grid"></div>
+
+<div id="splash">
+  <div class="loader"></div>
+  <div class="splash-text">PerformanceTask Portal</div>
+</div>
+
+<div id="loginScreen">
+  <div class="glass login-card">
+    <div class="logo-row">
+      <img data-gap-logo onerror="this.style.display='none';document.querySelectorAll('[data-replace-on-logo]').forEach(function(e){e.style.display=''})" src="" alt="GAP" style="display:none;height:38px;max-width:120px;object-fit:contain;border-radius:8px;background:#fff;padding:4px;border:1px solid var(--line-2)"/>
+      <div class="logo-mark" data-replace-on-logo>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/>
+        </svg>
+      </div>
+      <div class="brand">
+        <h1 class="grad-text">PerformanceTask Portal</h1>
+        <div class="tag">Performance Tasks &amp; Written Works</div>
+      </div>
+    </div>
+
+    <div class="role-tabs" id="roleTabs">
+      <button class="role-tab active" data-role="student">Student</button>
+      <button class="role-tab" data-role="teacher">Teacher</button>
+      <button class="role-tab" data-role="admin">Admin</button>
+    </div>
+
+    <div id="studentForm">
+      <h2 class="login-title">Welcome back</h2>
+      <p class="login-sub">Enter your access code to view your activities and scores.</p>
+      <div class="field">
+        <label>Access Code</label>
+        <input class="input mono" id="studentCode" placeholder="Your student access code" autocomplete="off" />
+      </div>
+      <div class="err-msg" id="studentErr"></div>
+      <button class="btn primary lg" id="studentLoginBtn" style="width:100%">Continue →</button>
+    </div>
+
+    <div id="staffForm" class="hidden">
+      <h2 class="login-title">Faculty sign in</h2>
+      <p class="login-sub" id="staffSub">Use your Attendance Portal credentials.</p>
+      <div class="field">
+        <label>Email</label>
+        <input class="input" id="staffEmail" type="email" placeholder="email@deped.gov.ph" autocomplete="email" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input class="input" id="staffPassword" type="password" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <div class="err-msg" id="staffErr"></div>
+      <button class="btn primary lg" id="staffLoginBtn" style="width:100%">Sign in →</button>
+    </div>
+
+    <div class="login-foot" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;color:var(--orange-dd);text-decoration:none;font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.35);transition:all .2s var(--ease)" onmouseover="this.style.background='rgba(249,115,22,.22)';this.style.borderColor='rgba(249,115,22,.5)'" onmouseout="this.style.background='rgba(249,115,22,.12)';this.style.borderColor='rgba(249,115,22,.35)'"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>Back to The GAP</a>
+      <span style="color:var(--ink-faint);font-size:11px">PerformanceTask Portal &middot; CNHS</span>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="logo-row">
+      <img data-gap-logo onerror="this.style.display='none';document.querySelectorAll('[data-replace-on-logo]').forEach(function(e){e.style.display=''})" src="" alt="GAP" style="display:none;height:34px;max-width:100px;object-fit:contain;border-radius:7px;background:#fff;padding:3px;border:1px solid var(--line-2)"/>
+      <div class="logo-mark" data-replace-on-logo>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/>
+        </svg>
+      </div>
+      <div class="brand">
+        <h1 class="grad-text">PerformanceTask Portal</h1>
+        <div class="tag" id="tbTag">Performance Task System</div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <a class="btn sm ghost" href="index.html" title="Back to The GAP" style="text-decoration:none">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      <span>Hub</span>
+    </a>
+    <button class="btn sm install-btn" id="installBtn" style="display:none !important"></button>
+    <span class="pill" id="syPill" style="display:none;border-color:rgba(16,229,162,.4);color:var(--ok)">SY <span id="tbSY">—</span></span>
+    <span class="pill"><span class="dot"></span> <span id="connStatus">Online</span></span>
+    <div class="user-chip">
+      <div class="meta">
+        <div class="name" id="chipName">—</div>
+        <div class="role-badge" id="chipRole">—</div>
+      </div>
+      <div class="avatar" id="chipAvatar">U</div>
+    </div>
+    <button class="btn sm ghost" id="logoutBtn">Sign out</button>
+  </div>
+
+  <div class="shell">
+    <aside class="side" id="sideNav"></aside>
+    <main class="main" id="mainView"></main>
+  </div>
+  <nav id="mobileNav"></nav>
+</div>
+
+<div class="modal-bg" id="modalBg"></div>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+(function(){
+// GAP Offline Manager — universal offline detection, banner UI, pending-writes counter
+window.GAP_OFFLINE = {
+  pendingWrites: 0,
+  online: navigator.onLine,
+  init: function(){
+    if(this._init)return;this._init=true;
+    var bar=document.createElement('div');
+    bar.className='gap-offline-bar';bar.id='gapOfflineBar';
+    bar.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 1l22 22"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><path d="M12 20h.01"/></svg><span>You are offline. Changes save locally and sync when you reconnect.</span><span class="gap-pending" id="gapPendingPill" style="display:none">0 pending</span>';
+    document.body.appendChild(bar);
+    var sync=document.createElement('div');
+    sync.className='gap-sync-bar';sync.id='gapSyncBar';
+    sync.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg><span id="gapSyncMsg">Back online &mdash; syncing your changes&hellip;</span>';
+    document.body.appendChild(sync);
+    var self=this;
+    window.addEventListener('online',function(){self.setOnline()});
+    window.addEventListener('offline',function(){self.setOffline()});
+    if(!this.online)this.setOffline(true);
+  },
+  setOffline: function(silent){
+    this.online=false;
+    var bar=document.getElementById('gapOfflineBar');
+    var sync=document.getElementById('gapSyncBar');
+    if(bar){bar.classList.add('show');document.body.classList.add('gap-banner-active')}
+    if(sync){sync.classList.remove('show')}
+  },
+  setOnline: function(){
+    this.online=true;
+    var bar=document.getElementById('gapOfflineBar');
+    var sync=document.getElementById('gapSyncBar');
+    if(bar)bar.classList.remove('show');
+    if(sync){
+      var msg=document.getElementById('gapSyncMsg');
+      if(msg)msg.innerHTML=this.pendingWrites>0?'Back online &mdash; syncing '+this.pendingWrites+' change'+(this.pendingWrites===1?'':'s')+'&hellip;':'Back online.';
+      sync.classList.add('show');
+      document.body.classList.add('gap-banner-active');
+      var self=this;
+      setTimeout(function(){sync.classList.add('fading');setTimeout(function(){sync.classList.remove('show','fading');if(!self.online===false)document.body.classList.remove('gap-banner-active')},700)},2400);
+    }else{
+      document.body.classList.remove('gap-banner-active');
+    }
+  },
+  trackWrite: function(promise){
+    var self=this;
+    self.pendingWrites++;self.updatePendingUI();
+    if(!promise||typeof promise.then!=='function')return promise;
+    return promise.finally(function(){self.pendingWrites=Math.max(0,self.pendingWrites-1);self.updatePendingUI()});
+  },
+  updatePendingUI: function(){
+    var pill=document.getElementById('gapPendingPill');
+    if(!pill)return;
+    if(this.pendingWrites>0){pill.style.display='';pill.textContent=this.pendingWrites+' pending'}
+    else pill.style.display='none';
+  }
+};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){window.GAP_OFFLINE.init()});
+else window.GAP_OFFLINE.init();
+})();
+
+</script>
+
+<script>
+(function(){
+  const V = '9.23.0';
+  const mods = ['firebase-app-compat','firebase-auth-compat','firebase-database-compat'];
+  const cdns = [
+    n=>`https://www.gstatic.com/firebasejs/${V}/${n}.js`,
+    n=>`https://cdn.jsdelivr.net/npm/firebase@${V}/${n.replace('firebase-','')}/dist/${n}.js`,
+    n=>`https://cdn.jsdelivr.net/npm/firebase@${V}/${n}.js`
+  ];
+  function loadOne(name, cdnIdx){
+    return new Promise((res,rej)=>{
+      if(cdnIdx>=cdns.length) return rej(new Error('All CDNs failed for '+name));
+      const s = document.createElement('script');
+      s.src = cdns[cdnIdx](name);
+      s.onload = ()=>res();
+      s.onerror = ()=>{ loadOne(name,cdnIdx+1).then(res,rej); };
+      document.head.appendChild(s);
+    });
+  }
+  window.__fbReady = (async ()=>{
+    for(const m of mods){ await loadOne(m,0); }
+  })();
+})();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+
+let deferredInstall=null;
+let isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+function detectPlatform(){
+  const ua = navigator.userAgent || '';
+  const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  const isIOSChrome = isIOS && /CriOS/.test(ua);
+  const isIOSFirefox = isIOS && /FxiOS/.test(ua);
+  const isSafariIOS = isIOS && /Safari/.test(ua) && !/CriOS|FxiOS/.test(ua);
+  const isAndroid = /Android/.test(ua);
+  const isChrome = /Chrome/.test(ua) && !/Edg/.test(ua);
+  const isSamsung = /SamsungBrowser/.test(ua);
+  const isFirefox = /Firefox/.test(ua) && !isIOSFirefox;
+  const isEdge = /Edg/.test(ua);
+  return {isIOS,isIOSChrome,isIOSFirefox,isSafariIOS,isAndroid,isChrome,isSamsung,isFirefox,isEdge};
+}
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredInstall = e;
+});
+window.addEventListener('appinstalled',()=>{
+  deferredInstall = null;
+  isStandalone = true;
+  const b = document.getElementById('installBtn');
+  if(b) b.style.display='none';
+});
+</script>
+
+<script>
+(async ()=>{
+try{ await window.__fbReady; }
+catch(e){
+  document.getElementById('splash').innerHTML =
+    `<div style="max-width:400px;text-align:center;padding:20px">
+      <h2 style="color:#ff5c7a;margin-bottom:8px">Can't load Firebase</h2>
+      <p style="color:#9aa3c7;font-size:14px">Network blocked Firebase CDN. Try a different network or allow gstatic.com and cdn.jsdelivr.net.</p>
+    </div>`;
+  document.getElementById('splash').classList.remove('hide');
+  return;
+}
+
+const FIREBASE_CFG = {
+  apiKey:"AIzaSyA8rZTfnh5TJlTFOHO-7mFy0_jQjnBuExM",
+  authDomain:"cnhs-gap.firebaseapp.com",
+  databaseURL:"https://cnhs-gap-default-rtdb.firebaseio.com",
+  projectId:"cnhs-gap",
+  storageBucket:"cnhs-gap.firebasestorage.app",
+  messagingSenderId:"926668238139",
+  appId:"1:926668238139:web:3f86476c7007dc12969b1e"
+};
+const WW_TYPE_LABEL = {quiz:'Quiz', written_work:'Written Work', summative_test:'Summative Test'};
+function wwLabel(q){const t=(q&&q.wwType)||'quiz';return WW_TYPE_LABEL[t]||'Quiz'}
+function _sxR(s){const x=((s&&s.sex)||'').toString().trim().toLowerCase();if(x==='m'||x==='male')return 0;if(x==='f'||x==='female')return 1;return 2}
+function _sortBySxName(a,b){const sa=_sxR(a),sb=_sxR(b);if(sa!==sb)return sa-sb;return(a.name||'').localeCompare(b.name||'',undefined,{sensitivity:'base'})}
+function wwLabelShort(q){const t=(q&&q.wwType)||'quiz';return t==='quiz'?'Quiz':t==='written_work'?'WW':'ST'}
+
+// Single Firebase app, single auth, single database
+if(!firebase.apps.length) firebase.initializeApp(FIREBASE_CFG);
+const auth = firebase.auth();
+const db   = firebase.database();
+// Aliases preserve all existing code paths that referenced sourceAuth/sourceDB/mainAuth
+const sourceAuth = auth, mainAuth = auth, sourceDB = db;
+try{auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)}catch(e){console.warn('Auth persistence:',e)}
+// Monkey-patch Reference prototype so every set/update/remove/push tracks a pending write
+(function(){
+  if(!firebase.database||!firebase.database.Reference)return;
+  const Ref=firebase.database.Reference.prototype;
+  ['set','update','remove','setWithPriority','setPriority'].forEach(fn=>{
+    if(!Ref[fn]||Ref['_orig_'+fn])return;
+    Ref['_orig_'+fn]=Ref[fn];
+    Ref[fn]=function(){const p=Ref['_orig_'+fn].apply(this,arguments);return(window.GAP_OFFLINE)?window.GAP_OFFLINE.trackWrite(p):p};
+  });
+})();
+
+// Cache for the signed-in user's role from the database. Read once on auth state change,
+// then queried via getUserRole() throughout the app. NEVER hardcoded UIDs anywhere.
+let _userRoleCache = null;
+async function loadUserRole(uid){
+  if(!uid) return null;
+  try{
+    const snap = await db.ref('users/'+uid+'/role').get();
+    const role = snap.exists() ? snap.val() : null;
+    _userRoleCache = (role==='admin'||role==='teacher') ? role : 'teacher';
+    return _userRoleCache;
+  }catch(e){
+    console.warn('Could not read user role (defaulting to teacher):',e);
+    _userRoleCache = 'teacher';
+    return 'teacher';
+  }
+}
+function getUserRole(){ return _userRoleCache || 'teacher'; }
+function isAdminUser(){ return _userRoleCache === 'admin'; }
+async function ensureUserDoc(user){
+  if(!user || user.isAnonymous) return;
+  const uref = db.ref('users/'+user.uid);
+  try{
+    const snap = await uref.get();
+    if(!snap.exists()){
+      await uref.set({
+        uid: user.uid,
+        email: user.email || '',
+        name: user.displayName || (user.email||'').split('@')[0] || 'Teacher',
+        photoURL: user.photoURL || '',
+        role: 'teacher',
+        provider: (user.providerData[0] && user.providerData[0].providerId) || 'unknown',
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        lastLogin: Date.now()
+      });
+    }else{
+      try{ await uref.update({lastLogin: Date.now()}); }catch(e){}
+    }
+  }catch(e){console.warn('ensureUserDoc:',e)}
+}
+let _mainAuthReady=false;
+function _ensureMainAuth(){
+  // Backward-compat shim: previously this signed in anonymously to a separate project.
+  // Now auth is shared via the hub. If a real user is signed in we're ready;
+  // otherwise the app will redirect to the hub.
+  _mainAuthReady = !!auth.currentUser;
+  return Promise.resolve();
+}
+auth.onAuthStateChanged(u=>{ _mainAuthReady = !!u; });
+const SRC = {
+  teacherNode:    (uid)  => sourceDB.ref('teachers/'+uid),
+  allTeachers:    ()     => sourceDB.ref('teachers'),
+  studentByCode:  (code) => sourceDB.ref('students/'+code),
+  studentsByField:(field,val) => sourceDB.ref('students').orderByChild(field).equalTo(val),
+  allStudents:    ()     => sourceDB.ref('students'),
+  classesByTeacher:(uid) => sourceDB.ref('classes').orderByChild('teacherUid').equalTo(uid),
+  allClasses:     ()     => sourceDB.ref('classes'),
+  globalSettings: ()     => sourceDB.ref('globalSettings'),
+};
+
+function extractActiveSY(gs){
+  if(!gs) return null;
+  const keys = ['activeSchoolYear','currentSchoolYear','schoolYear','activeSY','currentSY','sy'];
+  for(const k of keys){
+    const v = gs[k];
+    if(v==null) continue;
+    if(typeof v==='string' || typeof v==='number') return String(v);
+    if(typeof v==='object'){
+      if(v.label) return String(v.label);
+      if(v.name)  return String(v.name);
+      if(v.year)  return String(v.year);
+      if(v.value) return String(v.value);
+      if(v.start && v.end) return `${v.start}-${v.end}`;
+      if(v.from  && v.to)  return `${v.from}-${v.to}`;
+    }
+  }
+  if(gs.start && gs.end) return `${gs.start}-${gs.end}`;
+  return null;
+}
+
+const SESSION_KEY = 'uth_session_v1';
+function saveSession(){ try{ localStorage.setItem(SESSION_KEY, JSON.stringify({role:state.role, user:state.user})); }catch(e){} }
+function clearSession(){ try{ localStorage.removeItem(SESSION_KEY); }catch(e){} }
+function loadSession(){ try{ const raw = localStorage.getItem(SESSION_KEY); return raw? JSON.parse(raw) : null; }catch(e){ return null; } }
+
+const state = {
+  role:null, user:null,
+  activities:{}, submissions:{},
+  quizzes:{}, quizScores:{},
+  students:{}, staff:{}, classes:{}, users:{},
+  activeSY:null,
+  page:'home',
+  _ctxClassId:null,
+  quarterFilter:'all',
+};
+
+function isDroppedStudent(s){
+  if(!s) return false;
+  const v = x => String(x||'').toLowerCase().trim();
+  if(s.dropped===true || s.isDropped===true || s.transferred===true) return true;
+  if(['dropped','drop','dropout','transferred','inactive','removed'].includes(v(s.status))) return true;
+  if(['dropped','drop','dropout','transferred','inactive','removed'].includes(v(s.enrollmentStatus))) return true;
+  if(['dropped','drop','dropout','transferred','inactive','removed'].includes(v(s.enrolment))) return true;
+  return false;
+}
+
+function isActiveSYClass(c){
+  if(!state.activeSY) return true;
+  if(!c) return false;
+  if(!c.schoolYear) return true;
+  return String(c.schoolYear) === String(state.activeSY);
+}
+function isActiveSYStudent(s){
+  if(isDroppedStudent(s)) return false;
+  if(!state.activeSY) return true;
+  if(!s) return false;
+  if(s.schoolYear) return String(s.schoolYear) === String(state.activeSY);
+  if(s.classId){
+    const c = state.classes?.[s.classId];
+    if(c) return isActiveSYClass(c);
+  }
+  return true;
+}
+
+function studentLookup(dict, codes){
+  if(!dict || !codes) return null;
+  for(const c of codes){ if(dict[c]) return dict[c]; }
+  return null;
+}
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const initials = n => (n||'?').split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase();
+const fmtDate = t => t? new Date(t).toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}):'—';
+const fmtD = d => d? new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+const numSort = (a,b) => { const na = parseFloat(a)||0, nb = parseFloat(b)||0; if(na!==nb) return na-nb; return String(a||'').localeCompare(String(b||'')); };
+
+function toast(msg,type='info'){
+  const w = $('#toastWrap');
+  const el = document.createElement('div');
+  el.className = 'toast '+type;
+  const ic = type==='ok'?'✓':type==='err'?'!':'i';
+  el.innerHTML = `<div class="ic">${ic}</div><div>${esc(msg)}</div>`;
+  w.appendChild(el);
+  setTimeout(()=>{el.style.transition='opacity .4s';el.style.opacity='0';setTimeout(()=>el.remove(),400)},3200);
+}
+
+document.addEventListener('click',e=>{
+  const b = e.target.closest('.btn');
+  if(!b) return;
+  const r = b.getBoundingClientRect();
+  const sp = document.createElement('span');
+  sp.className='ripple';
+  const size = Math.max(r.width,r.height);
+  sp.style.width=sp.style.height=size+'px';
+  sp.style.left=(e.clientX-r.left-size/2)+'px';
+  sp.style.top=(e.clientY-r.top-size/2)+'px';
+  b.appendChild(sp);
+  setTimeout(()=>sp.remove(),600);
+});
+
+function openModal(html,wide=false){
+  const bg = $('#modalBg');
+  bg.innerHTML = `<div class="glass modal ${wide?'wide':''}">${html}</div>`;
+  requestAnimationFrame(()=>{ bg.classList.add('show'); });
+  bg.onclick = e=>{if(e.target===bg) closeModal();};
+  bg.querySelectorAll('.close').forEach(c=>c.onclick=closeModal);
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  const bg = $('#modalBg');
+  bg.classList.remove('show');
+  setTimeout(()=>{ bg.innerHTML=''; document.body.style.overflow = ''; },350);
+}
+
+const CONFIRM_VARIANTS = {
+  danger: {
+    bg:'linear-gradient(135deg,#ff5c7a,#be123c)',
+    glow:'rgba(255,92,122,.4)',
+    shadow:'rgba(255,92,122,.65)',
+    ring:'rgba(255,92,122,.5)',
+    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6"/></svg>'
+  },
+  warn: {
+    bg:'linear-gradient(135deg,#fbbf24,#d97706)',
+    glow:'rgba(251,191,36,.38)',
+    shadow:'rgba(251,191,36,.65)',
+    ring:'rgba(251,191,36,.5)',
+    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"/></svg>'
+  },
+  info: {
+    bg:'linear-gradient(135deg,#3b82f6,#1d4ed8)',
+    glow:'rgba(59,130,246,.4)',
+    shadow:'rgba(59,130,246,.65)',
+    ring:'rgba(59,130,246,.5)',
+    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>'
+  }
+};
+
+function confirmDialog({title='Are you sure?',message='',confirmText='Confirm',cancelText='Cancel',variant='danger'}){
+  return new Promise(resolve=>{
+    const v = CONFIRM_VARIANTS[variant] || CONFIRM_VARIANTS.danger;
+    const bg = $('#modalBg');
+    bg.innerHTML = `<div class="glass modal confirm-modal" style="--hero-bg:${v.bg};--hero-glow:${v.glow};--hero-shadow:${v.shadow};--hero-ring:${v.ring}">
+      <div class="confirm-hero">
+        <div class="confirm-icon">${v.icon}</div>
+        <h3>${esc(title)}</h3>
+        <p>${esc(message)}</p>
+      </div>
+      <div class="confirm-foot">
+        <button class="btn cancel" id="_cfCancel">${esc(cancelText)}</button>
+        <button class="btn ${variant==='danger'?'err':variant==='warn'?'cyan':'primary'}" id="_cfOK">${esc(confirmText)}</button>
+      </div>
+    </div>`;
+    requestAnimationFrame(()=>{ bg.classList.add('show'); });
+    document.body.style.overflow = 'hidden';
+    const finish = (v)=>{
+      bg.classList.remove('show');
+      setTimeout(()=>{ bg.innerHTML=''; document.body.style.overflow = ''; resolve(v); },350);
+    };
+    bg.onclick = e=>{if(e.target===bg) finish(false);};
+    $('#_cfCancel').onclick = ()=>finish(false);
+    $('#_cfOK').onclick = ()=>finish(true);
+    const esckey = e=>{ if(e.key==='Escape'){ finish(false); document.removeEventListener('keydown',esckey); } };
+    document.addEventListener('keydown',esckey);
+  });
+}
+
+document.querySelectorAll('.role-tab').forEach(b=>{
+  b.onclick = ()=>{
+    document.querySelectorAll('.role-tab').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    const role = b.dataset.role;
+    if(role==='student'){ $('#studentForm').classList.remove('hidden'); $('#staffForm').classList.add('hidden'); }
+    else {
+      $('#studentForm').classList.add('hidden'); $('#staffForm').classList.remove('hidden');
+      $('#staffSub').textContent = role==='admin' ? 'Administrator access. Use your CNHS Attendance Portal credentials.' : 'Teacher sign-in. Use your CNHS Attendance Portal credentials.';
+      $('#staffForm').dataset.role = role;
+    }
+  };
+});
+
+$('#studentLoginBtn').onclick = async ()=>{
+  const input = $('#studentCode').value.trim();
+  $('#studentErr').textContent='';
+  if(!input){ $('#studentErr').textContent='Please enter your access code.'; return; }
+  try{
+    let found = null, key = null;
+    const direct = await SRC.studentByCode(input).get();
+    if(direct.exists()){ found = direct.val(); key = input; }
+    else {
+      const byCode = await SRC.studentsByField('code', input).get();
+      if(byCode.exists()){
+        const obj = byCode.val();
+        key = Object.keys(obj)[0]; found = obj[key];
+      } else {
+        const byOrig = await SRC.studentsByField('originalCode', input).get();
+        if(byOrig.exists()){
+          const obj = byOrig.val();
+          key = Object.keys(obj)[0]; found = obj[key];
+        }
+      }
+    }
+    if(!found){ $('#studentErr').textContent='Access code not found.'; return; }
+    if(isDroppedStudent(found)){ $('#studentErr').textContent='This account has been marked as dropped. Please contact your adviser.'; return; }
+
+    const enrollments = {};
+    enrollments[key] = found;
+    const tryField = async (field,val)=>{
+      if(!val) return;
+      try{
+        const s = await SRC.studentsByField(field, val).get();
+        if(s.exists()){ Object.assign(enrollments, s.val()); }
+      }catch(e){}
+    };
+    await tryField('originalCode', found.originalCode || input);
+    await tryField('code', found.code || input);
+    await tryField('lrn', found.lrn);
+
+    for(const k of Object.keys(enrollments)){
+      if(isDroppedStudent(enrollments[k])) delete enrollments[k];
+    }
+
+    const classIds = [...new Set(Object.values(enrollments).map(e=>e.classId).filter(Boolean))];
+    const codes = [...new Set(Object.keys(enrollments))];
+    if(!codes.includes(key) && !isDroppedStudent(found)) codes.push(key);
+
+    state.role = 'student';
+    state.user = {
+      id: key, code: key,
+      codes: codes.length? codes : [key],
+      classIds: classIds.length? classIds : (found.classId?[found.classId]:[]),
+      lrn: found.lrn || '',
+      originalCode: found.originalCode || found.code || input,
+      name: found.name || found.fullName || 'Student',
+      grade: found.grade || found.gradeLevel || '',
+      section: found.section || '',
+      classId: found.classId || ''
+    };
+    saveSession();
+    await enterApp();
+  }catch(err){
+    console.error(err);
+    $('#studentErr').textContent='Unable to verify. Check your connection.';
+  }
+};
+$('#studentCode').addEventListener('keydown',e=>{if(e.key==='Enter')$('#studentLoginBtn').click();});
+
+$('#staffLoginBtn').onclick = async ()=>{
+  const wantedRole = $('#staffForm').dataset.role || 'teacher';
+  const email = $('#staffEmail').value.trim();
+  const pw = $('#staffPassword').value;
+  $('#staffErr').textContent='';
+  if(!email || !pw){ $('#staffErr').textContent='Enter email and password.'; return; }
+  try{
+    const cred = await auth.signInWithEmailAndPassword(email,pw);
+    const uid = cred.user.uid;
+    await ensureUserDoc(cred.user);
+    const role = await loadUserRole(uid);
+    const isAdmin = role === 'admin';
+    if(wantedRole==='admin' && !isAdmin){
+      $('#staffErr').textContent='This account is not an administrator.';
+      await auth.signOut(); return;
+    }
+    let profile = null;
+    try{ const tSnap = await db.ref('teachers/'+uid).get(); if(tSnap.exists()) profile = tSnap.val(); }catch(e){}
+    state.role = isAdmin ? 'admin' : 'teacher';
+    state.user = {
+      id: uid,
+      name: profile?.name || profile?.fullName || cred.user.displayName || (isAdmin ? 'Administrator' : email.split('@')[0]),
+      email
+    };
+    saveSession();
+    await enterApp();
+  }catch(err){
+    console.error(err);
+    const code = err.code||'';
+    if(code.includes('wrong-password') || code.includes('invalid-credential')) $('#staffErr').textContent='Incorrect email or password.';
+    else if(code.includes('user-not-found')) $('#staffErr').textContent='No account found with that email.';
+    else if(code.includes('too-many')) $('#staffErr').textContent='Too many attempts. Try again later.';
+    else $('#staffErr').textContent='Sign-in failed. '+ (err.message||'');
+  }
+};
+$('#staffPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('#staffLoginBtn').click();});
+
+async function enterApp(){
+  $('#loginScreen').style.display='none';
+  $('#app').style.display='block';
+  $('#chipName').textContent = state.user.name;
+  $('#chipRole').textContent = state.role;
+  $('#chipAvatar').textContent = initials(state.user.name);
+  $('#tbTag').textContent = state.role==='admin'?'Administrator Console': state.role==='teacher'?'Workspace':'Student Portal';
+
+  renderNav();
+  db.ref('activities').on('value',s=>{ state.activities = s.val()||{}; if(state.page) render(state.page); });
+  db.ref('submissions').on('value',s=>{ state.submissions = s.val()||{}; if(state.page) render(state.page); });
+  db.ref('quizzes').on('value',s=>{ state.quizzes = s.val()||{}; if(state.page) render(state.page); });
+  db.ref('quizScores').on('value',s=>{ state.quizScores = s.val()||{}; if(state.page) render(state.page); });
+
+  if(state.role==='admin' || state.role==='teacher'){
+    SRC.globalSettings().get().then(s=>{
+      state.activeSY = extractActiveSY(s.val());
+      if(state.activeSY){
+        const tag = $('#tbSY'); if(tag) tag.textContent = state.activeSY;
+        const pill = $('#syPill'); if(pill) pill.style.display = 'inline-flex';
+      }
+      if(state.page) render(state.page);
+    }).catch(()=>{});
+
+function _normalizeGapLogoUrl(v){
+  if(!v)return v;
+  // Auto-upgrade old /uc?export=view URLs to the lh3 endpoint that works for hot-linking
+  if(/drive\.google\.com\/uc\?/.test(v)){
+    var m=v.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if(m)return 'https://lh3.googleusercontent.com/d/'+m[1]+'=w1200';
+  }
+  return v;
+}
+
+    // GAP logo subscription
+    try{
+      sourceDB.ref('globalSettings/rankingsHeader').on('value',function(snap){
+        var v=_normalizeGapLogoUrl(snap.val());
+        if(v){try{localStorage.setItem('GAP_logo',v)}catch(e){}}
+        else{try{localStorage.removeItem('GAP_logo')}catch(e){}}
+        document.querySelectorAll('[data-gap-logo]').forEach(function(el){if(v){el.src=v;el.style.display=''}else{el.style.display='none'}});
+        document.querySelectorAll('[data-replace-on-logo]').forEach(function(el){el.style.display=v?'none':''});
+      });
+    }catch(e){}
+    SRC.allStudents().get().then(s=>{ state.students = s.val()||{}; if(state.page) render(state.page); }).catch(()=>{});
+    if(state.role==='admin'){
+      SRC.allTeachers().get().then(s=>{ state.staff = s.val()||{}; if(state.page) render(state.page); }).catch(()=>{});
+      SRC.allClasses().get().then(s=>{ state.classes = s.val()||{}; if(state.page) render(state.page); }).catch(()=>{});
+      db.ref('users').get().then(s=>{ state.users = s.val()||{}; if(state.page) render(state.page); }).catch(()=>{});
+    } else {
+      SRC.classesByTeacher(state.user.id).get().then(s=>{ state.classes = s.val()||{}; if(state.page) render(state.page); }).catch(()=>{});
+    }
+  } else if(state.role==='student'){
+    try{
+      const direct = await SRC.studentByCode(state.user.code).get();
+      if(direct.exists() && isDroppedStudent(direct.val())){
+        clearSession();
+        toast('Your account was marked as dropped. Please contact your adviser.','err');
+        setTimeout(()=>location.reload(),1500);
+        return;
+      }
+    }catch(e){}
+    SRC.allClasses().get().then(s=>{ state.classes = s.val()||{}; if(state.page) render(state.page); }).catch(()=>{});
+    try{
+      sourceDB.ref('globalSettings/rankingsHeader').on('value',function(snap){
+        var v=_normalizeGapLogoUrl(snap.val());
+        if(v){try{localStorage.setItem('GAP_logo',v)}catch(e){}}else{try{localStorage.removeItem('GAP_logo')}catch(e){}}
+        document.querySelectorAll('[data-gap-logo]').forEach(function(el){if(v){el.src=v;el.style.display=''}else{el.style.display='none'}});
+        document.querySelectorAll('[data-replace-on-logo]').forEach(function(el){el.style.display=v?'none':''});
+      });
+    }catch(e){}
+  }
+
+  state.page = state.role==='admin'?'overview' : state.role==='teacher'?'classes' : 'home';
+  render(state.page);
+}
+
+const NAV = {
+  admin:[
+    {k:'overview',label:'Overview',ic:'M3 12h4l3-9 4 18 3-9h4'},
+    {k:'activities',label:'All Performance Tasks',ic:'M9 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2h-4'},
+    {k:'quizzes',label:'All Written Works',ic:'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'},
+    {k:'staff',label:'Teachers & Staff',ic:'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-5a4 4 0 11-8 0 4 4 0 018 0z'},
+    {k:'students',label:'Students',ic:'M12 4a4 4 0 110 8 4 4 0 010-8zM6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2'},
+    {k:'submissions',label:'All Submissions',ic:'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2'},
+  ],
+  teacher:[
+    {k:'classes',label:'My Classes',ic:'M12 14l9-5-9-5-9 5 9 5zM12 14l6.16-3.422a12.1 12.1 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z'},
+    {k:'t-students',label:'My Students',ic:'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-5a4 4 0 11-8 0 4 4 0 018 0z'},
+    {k:'t-overview',label:'Overview',ic:'M3 6h18M3 12h18M3 18h18'},
+    {k:'my-activities',label:'Performance',ic:'M9 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2h-4'},
+    {k:'my-quizzes',label:'Written Works',ic:'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'},
+  ],
+  student:[
+    {k:'home',label:'Subjects',ic:'M4 6h16M4 12h16M4 18h16'},
+    {k:'s-overview',label:'Overview',ic:'M3 6h18M3 12h18M3 18h18'},
+    {k:'s-activities',label:'Performance',ic:'M9 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2h-4'},
+    {k:'s-quizzes',label:'Written Works',ic:'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'},
+    {k:'scores',label:'Scores',ic:'M13 10V3L4 14h7v7l9-11h-7z'},
+  ]
+};
+function renderNav(){
+  const items = NAV[state.role];
+  const side = $('#sideNav');
+  side.innerHTML = `<div class="group-label">${state.role.toUpperCase()} MENU</div>` +
+    items.map(i=>`
+      <button class="nav-item ${state.page===i.k?'active':''}" data-page="${i.k}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${i.ic}"/></svg>
+        <span>${i.label}</span>
+      </button>`).join('');
+  side.querySelectorAll('.nav-item').forEach(n=>n.onclick=()=>{state.page=n.dataset.page;renderNav();render(state.page);window.scrollTo({top:0,behavior:'smooth'})});
+
+  const mob = $('#mobileNav');
+  if(mob){
+    mob.innerHTML = items.map(i=>`
+      <button class="nav-item ${state.page===i.k?'active':''}" data-page="${i.k}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${i.ic}"/></svg>
+        <span>${i.label}</span>
+      </button>`).join('');
+    mob.querySelectorAll('.nav-item').forEach(n=>n.onclick=()=>{state.page=n.dataset.page;renderNav();render(state.page);window.scrollTo({top:0,behavior:'smooth'})});
+  }
+}
+
+function render(page){
+  const v = $('#mainView');
+  if(state.role==='admin'){
+    if(page==='overview') return renderAdminOverview(v);
+    if(page==='activities') return renderAdminActivities(v);
+    if(page==='quizzes') return renderAdminQuizzes(v);
+    if(page==='staff') return renderAdminStaff(v);
+    if(page==='students') return renderAdminStudents(v);
+    if(page==='submissions') return renderAdminSubmissions(v);
+  }
+  if(state.role==='teacher'){
+    if(page==='classes') return renderTeacherClasses(v);
+    if(page==='t-students') return renderTeacherStudents(v);
+    if(page==='t-overview') return renderTeacherOverview(v);
+    if(page==='my-activities') return renderMyActivities(v);
+    if(page==='my-quizzes') return renderMyQuizzes(v);
+    if(page==='create') return renderCreateActivity(v);
+  }
+  if(state.role==='student'){
+    if(page==='home') return renderStudentHome(v);
+    if(page==='s-overview') return renderStudentCombinedOverview(v);
+    if(page==='s-activities') return renderStudentActivities(v);
+    if(page==='s-quizzes') return renderStudentQuizzesPage(v);
+    if(page==='scores') return renderStudentScores(v);
+  }
+}
+
+function statCard(v,l,c){
+  return `<div class="glass stat">
+    <div class="icon" style="background:${c}22;color:${c}">●</div>
+    <div class="v" style="color:${c}">${v}</div>
+    <div class="l">${l}</div>
+  </div>`;
+}
+function emptyBlock(title,sub){
+  return `<div class="glass empty" style="padding:50px 20px">
+    <div class="ico">✨</div>
+    <h4 style="font-size:17px;color:var(--ink);margin-bottom:4px">${esc(title)}</h4>
+    <div>${esc(sub)}</div>
+  </div>`;
+}
+function activityCard(a,opts={}){
+  const subs = state.submissions?.[a.id]||{};
+  const subCount = Object.keys(subs).length;
+  let statusHTML='';
+  if(opts.student && opts.sub){
+    statusHTML = `<span class="score-pill">Score: ${opts.sub.score}/${a.maxScore}</span>`;
+  } else if(opts.student){
+    statusHTML = `<span class="pill" style="border-color:rgba(251,191,36,.4);color:var(--warn)">Pending</span>`;
+  } else {
+    statusHTML = `<span class="pill">${subCount} graded</span>`;
+  }
+  const labelBits = [];
+  if(a.activityNumber) labelBits.push('PT '+esc(a.activityNumber));
+  if(a.quarter) labelBits.push('Q'+esc(a.quarter));
+  return `<div class="glass act-card" data-act="${a.id}" ${opts.grade?'data-grade="1"':''}>
+    <div class="ribbon"></div>
+    ${labelBits.length?`<div style="display:flex;gap:6px;margin-bottom:6px;position:relative">${labelBits.map(b=>`<span class="pill" style="font-size:10.5px">${b}</span>`).join('')}</div>`:''}
+    <h4>${esc(a.title)}</h4>
+    <div class="desc">${esc(a.description||'No description provided.')}</div>
+    <div class="meta">
+      <span class="pill">Max ${a.maxScore}</span>
+      ${a.className?`<span class="pill">${esc(a.className)}</span>`:''}
+      ${statusHTML}
+    </div>
+  </div>`;
+}
+function attachActivityCardHandlers(){
+  document.querySelectorAll('.act-card').forEach(c=>{
+    c.onclick = ()=>{
+      if(c.dataset.grade==='1') openGradeModal(c.dataset.act);
+      else openActivityDetail(c.dataset.act);
+    };
+  });
+}
+
+function renderAdminOverview(v){
+  const acts = Object.values(state.activities||{});
+  const quizzes = Object.values(state.quizzes||{});
+  const subCount = Object.values(state.submissions||{}).reduce((a,b)=>a+Object.keys(b||{}).length,0);
+  const qsCount  = Object.values(state.quizScores||{}).reduce((a,b)=>a+Object.keys(b||{}).length,0);
+  const studentsCount = Object.values(state.students||{}).filter(isActiveSYStudent).length;
+  const userRoles = state.users || {};
+  const teacherCount = Object.keys(state.staff||{}).filter(uid => (userRoles[uid] && userRoles[uid].role) !== 'admin').length;
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>Overview</h2><p>A live snapshot of PerformanceTask Portal activity.</p></div>
+    </div>
+    <div class="stats">
+      ${statCard(acts.length,'Performance','#f97316')}
+      ${statCard(quizzes.length,'Written Works','#3b82f6')}
+      ${statCard(subCount+qsCount,'Graded Entries','#10e5a2')}
+      ${statCard(teacherCount,'Teachers','#fbbf24')}
+      ${statCard(studentsCount,'Students','#fbbf24')}
+    </div>
+    <div class="glass" style="padding:20px;margin-top:6px">
+      <h3 style="margin-bottom:12px;font-size:17px">Recent Performance Tasks</h3>
+      ${acts.length===0 ? emptyBlock('No activities yet','Teachers will populate this feed.') :
+        `<div class="table-wrap"><table class="data"><thead><tr>
+          <th>#</th><th>Title</th><th>Q</th><th>Teacher</th><th>Max</th><th>Graded</th><th>Created</th>
+        </tr></thead><tbody>
+        ${acts.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).slice(0,8).map(a=>{
+          const subs = Object.keys(state.submissions?.[a.id]||{}).length;
+          return `<tr><td>${esc(a.activityNumber||'—')}</td><td><b>${esc(a.title)}</b></td><td>Q${esc(a.quarter||'—')}</td><td>${esc(a.createdByName||'—')}</td><td>${a.maxScore}</td><td>${subs}</td><td class="muted">${fmtDate(a.createdAt)}</td></tr>`;
+        }).join('')}
+        </tbody></table></div>`}
+    </div>`;
+}
+
+function renderAdminActivities(v){
+  const acts = Object.values(state.activities||{}).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>All Performance Tasks</h2><p>Browse every performance task in the system.</p></div>
+    </div>
+    ${acts.length===0? emptyBlock('No activities yet','Teachers can create activities from their classes.') :
+      `<div class="cards-grid">${acts.map(a=>activityCard(a,{admin:true})).join('')}</div>`}`;
+  attachActivityCardHandlers();
+}
+
+function renderAdminQuizzes(v){
+  const all = Object.values(state.quizzes||{}).sort((a,b)=>(b.date?new Date(b.date).getTime():0) - (a.date?new Date(a.date).getTime():0));
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>All Written Works</h2><p>Every quiz, written work, and summative test in the system.</p></div>
+    </div>
+    ${all.length===0? emptyBlock('No quizzes yet','Teachers will record quizzes from their class cards.') : `
+    <div class="table-wrap"><table class="data"><thead><tr>
+      <th>Type</th><th>WW #</th><th>Date</th><th>Q</th><th>Class</th><th>Teacher</th><th>HPS</th><th>Scored</th>
+    </tr></thead><tbody>
+    ${all.map(q=>{
+      const cnt = Object.keys(state.quizScores?.[q.id]||{}).length;
+      return `<tr>
+        <td><span class="type-badge qz">${wwLabelShort(q)}</span></td>
+        <td><b>${esc(q.quizNumber)}</b></td>
+        <td class="muted">${fmtD(q.date)}</td>
+        <td><span class="pill">Q${esc(q.quarter||'—')}</span></td>
+        <td>${esc(q.className||'—')}</td>
+        <td class="muted">${esc(q.createdByName||'—')}</td>
+        <td>${q.maxScore}</td>
+        <td>${cnt}</td>
+      </tr>`;
+    }).join('')}
+    </tbody></table></div>`}`;
+}
+
+function renderAdminStaff(v){
+  const userRoles = state.users || {};
+  const staff = Object.entries(state.staff||{})
+    .map(([uid,u])=>({uid, role: (userRoles[uid] && userRoles[uid].role) || 'teacher', ...u}))
+    .sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>Teachers & Staff</h2><p>Sourced live from CogonNHS Attendance Portal.</p></div>
+    </div>
+    <div class="table-wrap"><table class="data"><thead><tr>
+      <th>Name</th><th>Role</th><th>Email</th><th>Perf. Tasks</th>
+    </tr></thead><tbody>
+    ${staff.length===0? `<tr><td colspan="4" class="empty">No teacher records found.</td></tr>`:
+      staff.map(u=>{
+        const count = Object.values(state.activities||{}).filter(a=>a.createdBy===u.uid).length;
+        return `<tr>
+          <td><b>${esc(u.name||u.fullName||'—')}</b></td>
+          <td><span class="pill">${esc(u.role.toUpperCase())}</span></td>
+          <td class="muted">${esc(u.email||'—')}</td>
+          <td>${count}</td>
+        </tr>`;
+      }).join('')}
+    </tbody></table></div>`;
+}
+
+function renderAdminStudents(v){
+  const list = Object.entries(state.students||{})
+    .filter(([code,s])=>isActiveSYStudent(s))
+    .map(([code,s])=>({code,...s}));
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>Students</h2><p>${list.length} active student record${list.length===1?'':'s'}${state.activeSY?` for SY <b>${esc(state.activeSY)}</b>`:''}.</p></div>
+      <input class="input" id="sFilter" placeholder="Search..." style="max-width:280px">
+    </div>
+    <div class="table-wrap"><table class="data"><thead><tr>
+      <th>Code</th><th>LRN</th><th>Name</th><th>Grade</th><th>Section</th><th>Done</th>
+    </tr></thead><tbody id="stBody"></tbody></table></div>`;
+  const renderList = (q='')=>{
+    const body = $('#stBody');
+    const needle = q.toLowerCase();
+    const filtered = list.filter(s=>
+      !needle || (s.name||'').toLowerCase().includes(needle) || (s.code||'').toString().includes(needle) || (s.lrn||'').toString().includes(needle) || (s.section||'').toLowerCase().includes(needle)
+    );
+    if(!filtered.length){ body.innerHTML = `<tr><td colspan="6" class="empty">No matches.</td></tr>`; return; }
+    body.innerHTML = filtered.map(s=>{
+      const done = Object.values(state.submissions||{}).filter(sub=>sub[s.code]).length
+                 + Object.values(state.quizScores||{}).filter(sub=>sub[s.code]).length;
+      return `<tr>
+        <td class="mono">${esc(s.code)}</td>
+        <td class="mono">${esc(s.lrn||'—')}</td>
+        <td><b>${esc(s.name||s.fullName||'—')}</b></td>
+        <td>${esc(s.grade||s.gradeLevel||'—')}</td>
+        <td>${esc(s.section||'—')}</td>
+        <td>${done}</td>
+      </tr>`;
+    }).join('');
+  };
+  renderList();
+  $('#sFilter').oninput = e=>renderList(e.target.value);
+}
+
+function renderAdminSubmissions(v){
+  const rows = [];
+  Object.entries(state.submissions||{}).forEach(([aid,subs])=>{
+    const a = state.activities[aid]; if(!a) return;
+    Object.entries(subs||{}).forEach(([code,r])=>{ rows.push({kind:'PT',ref:a,code,...r}); });
+  });
+  Object.entries(state.quizScores||{}).forEach(([qid,subs])=>{
+    const q = state.quizzes[qid]; if(!q) return;
+    Object.entries(subs||{}).forEach(([code,r])=>{ rows.push({kind:'WW',ref:q,code,...r}); });
+  });
+  rows.sort((a,b)=>(b.gradedAt||0)-(a.gradedAt||0));
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>All Submissions</h2><p>Every graded record across the school.</p></div>
+    </div>
+    ${rows.length===0? emptyBlock('No submissions yet','Once teachers grade, they show here.') :
+    `<div class="table-wrap"><table class="data"><thead><tr>
+      <th>Student</th><th>Type</th><th>Item</th><th>Score</th><th>Graded By</th><th>Date</th>
+    </tr></thead><tbody>
+    ${rows.map(r=>{
+      const title = r.kind==='WW' ? `${wwLabel(r.ref)} ${esc(r.ref.quizNumber)}` : (r.ref.activityNumber?`PT ${esc(r.ref.activityNumber)} · `:'')+esc(r.ref.title);
+      return `<tr>
+        <td><b>${esc(r.studentName||state.students?.[r.code]?.name||r.code)}</b><div class="mono" style="font-size:11px;color:var(--ink-faint)">${esc(r.code)}</div></td>
+        <td><span class="type-badge ${r.kind==='WW'?'qz':'act'}">${r.kind==='WW'?wwLabelShort(r.ref):r.kind}</span></td>
+        <td>${title}${r.ref.className?` <span class="muted" style="font-size:11px">· ${esc(r.ref.className)}</span>`:''}</td>
+        <td><span class="score-pill">${r.score}/${r.ref.maxScore}</span></td>
+        <td class="muted">${esc(r.gradedByName||'—')}</td>
+        <td class="muted">${fmtDate(r.gradedAt)}</td>
+      </tr>`;
+    }).join('')}
+    </tbody></table></div>`}`;
+}
+
+function renderTeacherClasses(v){
+  const myClasses = Object.entries(state.classes||{})
+    .filter(([cid,c])=>c.teacherUid===state.user.id && isActiveSYClass(c))
+    .map(([cid,c])=>({cid,...c}));
+  const activeCids = new Set(myClasses.map(c=>c.cid));
+  const myActs = Object.values(state.activities||{}).filter(a=>a.createdBy===state.user.id && (!a.classId || activeCids.has(a.classId)));
+  const myQuizzes = Object.values(state.quizzes||{}).filter(q=>q.createdBy===state.user.id && (!q.classId || activeCids.has(q.classId)));
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>My Classes</h2><p>All the subjects you teach, pulled live from the Attendance Portal.</p></div>
+    </div>
+    <div class="stats">
+      ${statCard(myClasses.length,'Classes','#f97316')}
+      ${statCard(myActs.length,'Performance','#3b82f6')}
+      ${statCard(myQuizzes.length,'Written Works','#fbbf24')}
+    </div>
+    ${quarterFilterBar()}
+    ${myClasses.length===0 ? emptyBlock('No classes yet','Create classes in the Attendance Portal first.') : `<div id="classList"></div>`}`;
+  attachQuarterFilter(v);
+  if(!myClasses.length) return;
+  const list = $('#classList');
+  myClasses.sort((a,b)=>(a.subject||'').localeCompare(b.subject||''));
+  list.innerHTML = myClasses.map(c=>{
+    const studentsInClass = Object.entries(state.students||{})
+      .filter(([code,s])=>s.classId===_rosterCid(c.cid) && isActiveSYStudent(s))
+      .map(([code,s])=>({code,...s}));
+    const classActs = applyQuarterFilter(Object.values(state.activities||{}).filter(a=>a.classId===c.cid && a.createdBy===state.user.id))
+      .sort((a,b)=>(parseInt(a.quarter||0) - parseInt(b.quarter||0)) || numSort(a.activityNumber,b.activityNumber));
+    const classQuizzes = applyQuarterFilter(Object.values(state.quizzes||{}).filter(q=>q.classId===c.cid && q.createdBy===state.user.id))
+      .sort((a,b)=>(parseInt(a.quarter||0) - parseInt(b.quarter||0)) || numSort(a.quizNumber,b.quizNumber));
+    return `
+    <div class="glass" style="padding:20px;margin-bottom:16px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+        <div style="min-width:0">
+          <h3 style="font-size:19px">📚 ${esc(c.subject||'Untitled Subject')}</h3>
+          <div class="muted" style="font-size:12.5px;margin-top:3px">
+            ${esc(c.section||'—')}${c.schoolYear?' · SY '+esc(c.schoolYear):''} · ${studentsInClass.length} student${studentsInClass.length===1?'':'s'}
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn sm cyan" data-new-quiz="${c.cid}">+ Quiz</button>
+          <button class="btn sm primary" data-new-act="${c.cid}">+ Activity</button>
+        </div>
+      </div>
+      <details style="margin-bottom:10px"><summary style="cursor:pointer;padding:8px 0;font-size:12.5px;font-weight:600;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.08em">Students (${studentsInClass.length})</summary>
+        ${studentsInClass.length===0 ? `<div class="muted" style="font-size:13px;padding:8px 0">No students enrolled.</div>` :
+          `<div style="max-height:220px;overflow-y:auto;padding:6px 0">
+            ${studentsInClass.sort((a,b)=>(a.name||'').localeCompare(b.name||'')).map(s=>`
+              <div style="padding:8px 12px;border-radius:8px;background:#fff;border:1px solid var(--line);margin-bottom:6px">
+                <div style="font-weight:600;font-size:13px">${esc(s.name||s.fullName||'—')}</div>
+                <div class="mono" style="font-size:11px;color:var(--ink-faint)">Code: ${esc(s.code||'—')}${s.lrn?' · LRN '+esc(s.lrn):''}</div>
+              </div>`).join('')}
+          </div>`}
+      </details>
+      <div style="margin-bottom:14px">
+        <div class="quarter-label">Performance Tasks (${classActs.length})</div>
+        ${classActs.length===0 ? `<div class="muted" style="font-size:13px;padding:6px 4px">No activities for this filter.</div>` :
+          `<div class="table-wrap"><table class="data"><thead><tr>
+            <th>#</th><th>Q</th><th>Title</th><th>HPS</th><th>Graded</th><th></th>
+          </tr></thead><tbody>
+          ${classActs.map(a=>{
+            const cnt = Object.keys(state.submissions?.[a.id]||{}).length;
+            return `<tr>
+              <td><b>${esc(a.activityNumber||'—')}</b></td>
+              <td><span class="pill">Q${esc(a.quarter||'—')}</span></td>
+              <td>${esc(a.title)}</td>
+              <td>${a.maxScore}</td>
+              <td>${cnt}</td>
+              <td style="display:flex;gap:5px;justify-content:flex-end">
+                <button class="btn sm cyan" data-grade-act="${a.id}">Grade</button>
+                <button class="btn sm ghost" data-view-act="${a.id}">View</button>
+                <button class="btn sm err" data-del-act="${a.id}" title="Delete">✕</button>
+              </td>
+            </tr>`;
+          }).join('')}
+          </tbody></table></div>`}
+      </div>
+      <div>
+        <div class="quarter-label">Written Works (${classQuizzes.length})</div>
+        ${classQuizzes.length===0 ? `<div class="muted" style="font-size:13px;padding:6px 4px">No quizzes for this filter.</div>` :
+          `<div class="table-wrap"><table class="data"><thead><tr>
+            <th>Type</th><th>WW #</th><th>Q</th><th>Date</th><th>Topic</th><th>HPS</th><th>Graded</th><th></th>
+          </tr></thead><tbody>
+          ${classQuizzes.map(q=>{
+            const cnt = Object.keys(state.quizScores?.[q.id]||{}).length;
+            return `<tr>
+              <td><span class="type-badge qz">${wwLabelShort(q)}</span></td>
+              <td><b>${esc(q.quizNumber)}</b></td>
+              <td><span class="pill">Q${esc(q.quarter||'—')}</span></td>
+              <td class="muted">${fmtD(q.date)}</td>
+              <td class="muted">${esc((q.description||'').slice(0,48))}${(q.description||'').length>48?'…':''}</td>
+              <td>${q.maxScore}</td>
+              <td>${cnt}</td>
+              <td style="display:flex;gap:5px;justify-content:flex-end">
+                <button class="btn sm cyan" data-grade-quiz="${q.id}">Grade</button>
+                <button class="btn sm ghost" data-edit-quiz="${q.id}">Edit</button>
+                <button class="btn sm err" data-del-quiz="${q.id}" title="Delete">✕</button>
+              </td>
+            </tr>`;
+          }).join('')}
+          </tbody></table></div>`}
+      </div>
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('[data-new-act]').forEach(b=>b.onclick=()=>{
+    state._ctxClassId = b.dataset.newAct;
+    state.page='create'; render('create');
+  });
+  list.querySelectorAll('[data-grade-act]').forEach(b=>b.onclick=()=>openGradeModal(b.dataset.gradeAct));
+  list.querySelectorAll('[data-view-act]').forEach(b=>b.onclick=()=>openActivityDetail(b.dataset.viewAct));
+  list.querySelectorAll('[data-del-act]').forEach(b=>b.onclick=async ()=>{
+    if(!(await confirmDialog({title:'Delete activity?',message:'This will permanently remove the activity and every submission linked to it. This action cannot be undone.',confirmText:'Delete activity',variant:'danger'}))) return;
+    await db.ref('activities/'+b.dataset.delAct).remove();
+    await db.ref('submissions/'+b.dataset.delAct).remove();
+    delete state.activities[b.dataset.delAct];
+    toast('Performance Task deleted','ok');
+    render(state.page);
+  });
+  list.querySelectorAll('[data-new-quiz]').forEach(b=>b.onclick=()=>openQuizEditor(null, b.dataset.newQuiz));
+  list.querySelectorAll('[data-edit-quiz]').forEach(b=>b.onclick=()=>openQuizEditor(b.dataset.editQuiz));
+  list.querySelectorAll('[data-grade-quiz]').forEach(b=>b.onclick=()=>openQuizGradeModal(b.dataset.gradeQuiz));
+  list.querySelectorAll('[data-del-quiz]').forEach(b=>b.onclick=async ()=>{
+    if(!(await confirmDialog({title:'Delete quiz?',message:'This will permanently remove the quiz and every student score tied to it. This action cannot be undone.',confirmText:'Delete quiz',variant:'danger'}))) return;
+    await db.ref('quizzes/'+b.dataset.delQuiz).remove();
+    await db.ref('quizScores/'+b.dataset.delQuiz).remove();
+    delete state.quizzes[b.dataset.delQuiz];
+    toast('Written Work deleted','ok');
+    render(state.page);
+  });
+}
+
+function renderTeacherStudents(v){
+  const myClasses = Object.entries(state.classes||{})
+    .filter(([cid,c])=>c.teacherUid===state.user.id && isActiveSYClass(c))
+    .map(([cid,c])=>({cid,...c}));
+  const classStudents = {};
+  myClasses.forEach(c=>{
+    classStudents[c.cid] = Object.entries(state.students||{})
+      .filter(([code,s])=>s.classId===_rosterCid(c.cid) && isActiveSYStudent(s))
+      .map(([code,s])=>({code,...s}))
+      .sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  });
+  const totalStudents = Object.values(classStudents).reduce((a,b)=>a+b.length,0);
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>My Students</h2><p>Every student enrolled in your subjects, grouped by class. Click a student for full details.</p></div>
+    </div>
+    <div class="stats">
+      ${statCard(myClasses.length,'Classes','#f97316')}
+      ${statCard(totalStudents,'Students','#3b82f6')}
+      ${statCard(new Set(Object.values(classStudents).flat().map(s=>s.lrn||s.code)).size,'Unique Individuals','#10e5a2')}
+    </div>
+    <div class="field" style="max-width:360px;margin-bottom:18px">
+      <input class="input" id="tsFilter" placeholder="🔍 Search by name, code, or LRN..." />
+    </div>
+    ${myClasses.length===0? emptyBlock('No classes yet','Create a class in the Attendance Portal first.') :
+      myClasses.sort((a,b)=>(a.subject||'').localeCompare(b.subject||'')).map(c=>{
+        const list = classStudents[c.cid];
+        return `<div class="glass" style="padding:18px;margin-bottom:14px" data-class-block>
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+            <div>
+              <h3 style="font-size:17px">📚 ${esc(c.subject||'Subject')}</h3>
+              <div class="muted" style="font-size:12.5px;margin-top:3px">${esc(c.section||'')}${c.schoolYear?' · SY '+esc(c.schoolYear):''} · ${list.length} student${list.length===1?'':'s'}</div>
+            </div>
+          </div>
+          ${list.length===0? `<div class="muted" style="font-size:13px">No students enrolled yet.</div>` :
+            `<div class="cards-grid" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
+              ${list.map(s=>{
+                const acts = Object.values(state.activities||{}).filter(a=>a.classId===c.cid && a.createdBy===state.user.id);
+                const qzs = Object.values(state.quizzes||{}).filter(q=>q.classId===c.cid && q.createdBy===state.user.id);
+                const gradedA = acts.filter(a=>state.submissions?.[a.id]?.[s.code]).length;
+                const gradedQ = qzs.filter(q=>state.quizScores?.[q.id]?.[s.code]).length;
+                const total = acts.length + qzs.length;
+                const done = gradedA + gradedQ;
+                const pct = total ? Math.round((done/total)*100) : 0;
+                return `<div class="glass act-card" data-student="${s.code}" data-class="${c.cid}" data-search="${esc((s.name||'').toLowerCase()+' '+(s.code||'').toString().toLowerCase()+' '+(s.lrn||'').toString().toLowerCase())}">
+                  <div class="ribbon"></div>
+                  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;position:relative">
+                    <div class="avatar" style="width:38px;height:38px;border-radius:12px;background:var(--grad-2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#0a0a0a;flex-shrink:0">${esc(initials(s.name||s.fullName||'?'))}</div>
+                    <div style="min-width:0;flex:1">
+                      <div style="font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(s.name||s.fullName||'—')}</div>
+                      <div class="mono" style="font-size:10.5px;color:var(--ink-faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(s.code)}${s.lrn?' · '+esc(s.lrn):''}</div>
+                    </div>
+                  </div>
+                  <div style="position:relative">
+                    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ink-dim);margin-bottom:4px;font-weight:600"><span>Progress</span><span>${done}/${total}</span></div>
+                    <div style="height:6px;border-radius:3px;background:#fff;overflow:hidden">
+                      <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#f97316,#3b82f6,#10e5a2);border-radius:3px;transition:width .5s cubic-bezier(.2,.8,.2,1)"></div>
+                    </div>
+                  </div>
+                </div>`;
+              }).join('')}
+            </div>`}
+        </div>`;
+      }).join('')}
+  `;
+  v.querySelectorAll('[data-student]').forEach(c=>c.onclick=()=>openStudentDetail(c.dataset.student, c.dataset.class));
+  const filter = $('#tsFilter');
+  if(filter){
+    filter.oninput = e=>{
+      const q = (e.target.value||'').toLowerCase().trim();
+      v.querySelectorAll('[data-student]').forEach(c=>{
+        const show = !q || (c.dataset.search||'').includes(q);
+        c.style.display = show?'':'none';
+      });
+      v.querySelectorAll('[data-class-block]').forEach(blk=>{
+        const anyVisible = [...blk.querySelectorAll('[data-student]')].some(c=>c.style.display!=='none');
+        blk.style.display = (!q || anyVisible) ? '' : 'none';
+      });
+    };
+  }
+}
+
+function openStudentDetail(code, classId){
+  const s = state.students?.[code] || Object.values(state.students||{}).find(x=>x.code===code || x.originalCode===code);
+  if(!s) return;
+  const cls = state.classes?.[classId] || {};
+  const acts = Object.values(state.activities||{})
+    .filter(a=>a.classId===classId && a.createdBy===state.user.id)
+    .sort((a,b)=>(parseInt(a.quarter||0)-parseInt(b.quarter||0)) || numSort(a.activityNumber,b.activityNumber));
+  const qzs = Object.values(state.quizzes||{})
+    .filter(q=>q.classId===classId && q.createdBy===state.user.id)
+    .sort((a,b)=>(parseInt(a.quarter||0)-parseInt(b.quarter||0)) || numSort(a.quizNumber,b.quizNumber));
+
+  let totalEarned = 0, totalMax = 0;
+  acts.forEach(a=>{ const sub = state.submissions?.[a.id]?.[code]; if(sub){ totalEarned+=sub.score; totalMax+=a.maxScore; } });
+  qzs.forEach(q=>{ const sc = state.quizScores?.[q.id]?.[code]; if(sc){ totalEarned+=sc.score; totalMax+=q.maxScore; } });
+  const pct = totalMax? ((totalEarned/totalMax)*100).toFixed(1) : null;
+
+  openModal(`
+    <div class="modal-head">
+      <div style="display:flex;gap:14px;align-items:center;min-width:0">
+        <div class="avatar" style="width:52px;height:52px;border-radius:14px;background:var(--grad-2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;color:#0a0a0a;flex-shrink:0">${esc(initials(s.name||s.fullName||'?'))}</div>
+        <div style="min-width:0">
+          <h3 style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(s.name||s.fullName||'—')}</h3>
+          <p class="muted" style="font-size:12.5px;margin-top:2px">${esc(cls.subject||'')} · ${esc(s.section||cls.section||'—')} · Code <span class="mono">${esc(code)}</span>${s.lrn?' · LRN <span class="mono">'+esc(s.lrn)+'</span>':''}</p>
+        </div>
+      </div>
+      <button class="close">✕</button>
+    </div>
+    ${pct!==null? `<div class="fb-block" style="margin-top:0;margin-bottom:16px">
+      <div class="h">Performance in ${esc(cls.subject||'this class')}</div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div style="font-size:30px;font-weight:800;font-family:'Inter'" class="grad-text">${pct}%</div>
+        <div class="muted" style="font-size:13px">${totalEarned} / ${totalMax} points earned</div>
+      </div>
+    </div>`:''}
+    <h4 style="font-size:14px;margin-bottom:10px">Performance Tasks (${acts.length})</h4>
+    ${acts.length===0? `<div class="muted" style="font-size:13px;padding:6px 0 16px">No activities posted yet.</div>` : `
+      <div class="table-wrap" style="margin-bottom:16px"><table class="data"><thead><tr>
+        <th>#</th><th>Q</th><th>Title</th><th>Score</th><th></th>
+      </tr></thead><tbody>
+      ${acts.map(a=>{
+        const sub = state.submissions?.[a.id]?.[code];
+        return `<tr>
+          <td><b>${esc(a.activityNumber||'—')}</b></td>
+          <td><span class="pill">Q${esc(a.quarter||'—')}</span></td>
+          <td>${esc(a.title)}</td>
+          <td>${sub?`<span class="score-pill">${sub.score}/${a.maxScore}</span>`:`<span class="pill" style="border-color:rgba(251,191,36,.4);color:var(--warn)">Pending</span>`}</td>
+          <td style="text-align:right"><button class="btn sm cyan" data-grade-one="${a.id}">Grade</button></td>
+        </tr>`;
+      }).join('')}
+      </tbody></table></div>`}
+    <h4 style="font-size:14px;margin-bottom:10px">Written Works (${qzs.length})</h4>
+    ${qzs.length===0? `<div class="muted" style="font-size:13px;padding:6px 0">No quizzes posted yet.</div>` : `
+      <div class="table-wrap"><table class="data"><thead><tr>
+        <th>Type</th><th>WW #</th><th>Q</th><th>Date</th><th>Topic</th><th>Score</th><th></th>
+      </tr></thead><tbody>
+      ${qzs.map(q=>{
+        const sc = state.quizScores?.[q.id]?.[code];
+        return `<tr>
+          <td><b>${esc(q.quizNumber)}</b></td>
+          <td><span class="pill">Q${esc(q.quarter||'—')}</span></td>
+          <td class="muted">${fmtD(q.date)}</td>
+          <td class="muted" style="max-width:200px">${esc(q.description||'—')}</td>
+          <td>${sc?`<span class="score-pill">${sc.score}/${q.maxScore}</span>`:`<span class="pill" style="border-color:rgba(251,191,36,.4);color:var(--warn)">Pending</span>`}</td>
+          <td style="text-align:right"><button class="btn sm cyan" data-grade-quiz-one="${q.id}">Grade</button></td>
+        </tr>`;
+      }).join('')}
+      </tbody></table></div>`}
+    <div class="modal-foot">
+      <button class="btn cancel close">Close</button>
+    </div>
+  `,true);
+  const bg = $('#modalBg');
+  bg.querySelectorAll('[data-grade-one]').forEach(b=>b.onclick=()=>{ closeModal(); setTimeout(()=>openGradeModal(b.dataset.gradeOne),380); });
+  bg.querySelectorAll('[data-grade-quiz-one]').forEach(b=>b.onclick=()=>{ closeModal(); setTimeout(()=>openQuizGradeModal(b.dataset.gradeQuizOne),380); });
+}
+
+function renderTeacherOverview(v){
+  const myActs = applyQuarterFilter(Object.values(state.activities||{}).filter(a=>a.createdBy===state.user.id));
+  const myQzs = applyQuarterFilter(Object.values(state.quizzes||{}).filter(q=>q.createdBy===state.user.id));
+  const byQuarter = {};
+  for(let i=1;i<=4;i++) byQuarter[i] = {acts:[], qzs:[]};
+  myActs.forEach(a=>{ const q = parseInt(a.quarter)||0; if(byQuarter[q]) byQuarter[q].acts.push(a); });
+  myQzs.forEach(q=>{ const n = parseInt(q.quarter)||0; if(byQuarter[n]) byQuarter[n].qzs.push(q); });
+
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>Overview</h2><p>All your activities and quizzes, sorted by quarter and number.</p></div>
+    </div>
+    <div class="stats">
+      ${statCard(myActs.length,'Total Activities','#f97316')}
+      ${statCard(myQzs.length,'Total Quizzes','#3b82f6')}
+    </div>
+    ${quarterFilterBar()}
+    ${[1,2,3,4].map(q=>{
+      const g = byQuarter[q];
+      g.acts.sort((a,b)=>numSort(a.activityNumber,b.activityNumber));
+      g.qzs.sort((a,b)=>numSort(a.quizNumber,b.quizNumber));
+      const total = g.acts.length + g.qzs.length;
+      if(total===0) return '';
+      return `<div class="glass" style="padding:18px;margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <h3 style="font-size:17px">Quarter ${q}</h3>
+          <span class="pill">${total} item${total===1?'':'s'}</span>
+        </div>
+        <div class="table-wrap"><table class="data"><thead><tr>
+          <th>Type</th><th>#</th><th>Subject</th><th>Title / Topic</th><th>HPS</th><th>Graded</th>
+        </tr></thead><tbody>
+        ${g.acts.map(a=>{
+          const cnt = Object.keys(state.submissions?.[a.id]||{}).length;
+          return `<tr data-view-act="${a.id}" style="cursor:pointer">
+            <td><span class="type-badge act">Perf. Task</span></td>
+            <td><b>${esc(a.activityNumber||'—')}</b></td>
+            <td><b>${esc(a.className||'—')}</b></td>
+            <td>${esc(a.title)}</td>
+            <td>${a.maxScore}</td>
+            <td>${cnt}</td>
+          </tr>`;
+        }).join('')}
+        ${g.qzs.map(qz=>{
+          const cnt = Object.keys(state.quizScores?.[qz.id]||{}).length;
+          return `<tr data-edit-quiz="${qz.id}" style="cursor:pointer">
+            <td><span class="type-badge qz">${wwLabelShort(qz)}</span></td>
+            <td><b>${esc(qz.quizNumber)}</b></td>
+            <td><b>${esc(qz.className||'—')}</b></td>
+            <td>${esc(qz.description||'—')}</td>
+            <td>${qz.maxScore}</td>
+            <td>${cnt}</td>
+          </tr>`;
+        }).join('')}
+        </tbody></table></div>
+      </div>`;
+    }).join('')}
+    ${(myActs.length+myQzs.length===0) ? emptyBlock('Nothing yet','No items match this filter.') : ''}
+  `;
+  attachQuarterFilter(v);
+  v.querySelectorAll('[data-view-act]').forEach(r=>r.onclick=()=>openActivityDetail(r.dataset.viewAct));
+  v.querySelectorAll('[data-edit-quiz]').forEach(r=>r.onclick=()=>openQuizEditor(r.dataset.editQuiz));
+}
+
+function renderMyActivities(v){
+  const mine = applyQuarterFilter(Object.values(state.activities||{}).filter(a=>a.createdBy===state.user.id))
+    .sort((a,b)=>(parseInt(a.quarter||0)-parseInt(b.quarter||0)) || numSort(a.activityNumber,b.activityNumber));
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>All My Activities</h2><p>Every performance task you've created.</p></div>
+      <div class="actions"><button class="btn primary" id="btnNewAct">+ New Activity</button></div>
+    </div>
+    <div class="stats">
+      ${statCard(mine.length,'Performance','#f97316')}
+      ${statCard(mine.reduce((a,b)=>a+Object.keys(state.submissions?.[b.id]||{}).length,0),'Total Graded','#3b82f6')}
+    </div>
+    ${quarterFilterBar()}
+    ${mine.length===0? emptyBlock('Nothing here yet','Click "New Activity" to create your first performance task.') :
+     `<div class="table-wrap"><table class="data"><thead><tr>
+        <th>#</th><th>Q</th><th>Subject</th><th>Title</th><th>HPS</th><th>Graded</th><th></th>
+      </tr></thead><tbody>
+      ${mine.map(a=>{
+        const cnt = Object.keys(state.submissions?.[a.id]||{}).length;
+        return `<tr>
+          <td><b>${esc(a.activityNumber||'—')}</b></td>
+          <td><span class="pill">Q${esc(a.quarter||'—')}</span></td>
+          <td><b>${esc(a.className||'—')}</b></td>
+          <td>${esc(a.title)}</td>
+          <td>${a.maxScore}</td>
+          <td>${cnt}</td>
+          <td style="display:flex;gap:5px;justify-content:flex-end">
+            <button class="btn sm cyan" data-grade-act="${a.id}">Grade</button>
+            <button class="btn sm ghost" data-view-act="${a.id}">View</button>
+            <button class="btn sm err" data-del-act="${a.id}" title="Delete">✕</button>
+          </td>
+        </tr>`;
+      }).join('')}
+      </tbody></table></div>`}
+  `;
+  attachQuarterFilter(v);
+  $('#btnNewAct').onclick = ()=>{ state._ctxClassId=null; state.page='create'; render('create'); };
+  v.querySelectorAll('[data-grade-act]').forEach(b=>b.onclick=()=>openGradeModal(b.dataset.gradeAct));
+  v.querySelectorAll('[data-view-act]').forEach(b=>b.onclick=()=>openActivityDetail(b.dataset.viewAct));
+  v.querySelectorAll('[data-del-act]').forEach(b=>b.onclick=async ()=>{
+    if(!(await confirmDialog({title:'Delete activity?',message:'This will permanently remove the activity and every submission linked to it. This action cannot be undone.',confirmText:'Delete activity',variant:'danger'}))) return;
+    await db.ref('activities/'+b.dataset.delAct).remove();
+    await db.ref('submissions/'+b.dataset.delAct).remove();
+    delete state.activities[b.dataset.delAct];
+    toast('Performance Task deleted','ok');
+    render(state.page);
+  });
+}
+
+function renderMyQuizzes(v){
+  const mine = applyQuarterFilter(Object.values(state.quizzes||{}).filter(q=>q.createdBy===state.user.id))
+    .sort((a,b)=>(parseInt(a.quarter||0)-parseInt(b.quarter||0)) || numSort(a.quizNumber,b.quizNumber));
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>All My Quizzes</h2><p>Every quiz you've recorded across classes.</p></div>
+    </div>
+    <div class="stats">
+      ${statCard(mine.length,'Written Works','#3b82f6')}
+      ${statCard(mine.reduce((a,b)=>a+Object.keys(state.quizScores?.[b.id]||{}).length,0),'Total Scores','#10e5a2')}
+    </div>
+    ${quarterFilterBar()}
+    ${mine.length===0? emptyBlock('No quizzes yet','Create a quiz from your class card.') : `
+    <div class="table-wrap"><table class="data"><thead><tr>
+      <th>#</th><th>Q</th><th>Subject</th><th>Date</th><th>Topic</th><th>HPS</th><th>Scored</th><th></th>
+    </tr></thead><tbody>
+    ${mine.map(q=>{
+      const cnt = Object.keys(state.quizScores?.[q.id]||{}).length;
+      return `<tr>
+        <td><b>${esc(q.quizNumber)}</b></td>
+        <td><span class="pill">Q${esc(q.quarter||'—')}</span></td>
+        <td><b>${esc(q.className||'—')}</b></td>
+        <td class="muted">${fmtD(q.date)}</td>
+        <td class="muted" style="max-width:260px">${esc(q.description||'—')}</td>
+        <td><b>${q.maxScore}</b></td>
+        <td>${cnt}</td>
+        <td style="display:flex;gap:5px;justify-content:flex-end">
+          <button class="btn sm cyan" data-grade-quiz="${q.id}">Grade</button>
+          <button class="btn sm ghost" data-edit-quiz="${q.id}">Edit</button>
+          <button class="btn sm err" data-del-quiz="${q.id}" title="Delete">✕</button>
+        </td>
+      </tr>`;
+    }).join('')}
+    </tbody></table></div>`}`;
+  attachQuarterFilter(v);
+  v.querySelectorAll('[data-grade-quiz]').forEach(b=>b.onclick=()=>openQuizGradeModal(b.dataset.gradeQuiz));
+  v.querySelectorAll('[data-edit-quiz]').forEach(b=>b.onclick=()=>openQuizEditor(b.dataset.editQuiz));
+  v.querySelectorAll('[data-del-quiz]').forEach(b=>b.onclick=async ()=>{
+    if(!(await confirmDialog({title:'Delete quiz?',message:'This will permanently remove the quiz and every student score tied to it. This action cannot be undone.',confirmText:'Delete quiz',variant:'danger'}))) return;
+    await db.ref('quizzes/'+b.dataset.delQuiz).remove();
+    await db.ref('quizScores/'+b.dataset.delQuiz).remove();
+    delete state.quizzes[b.dataset.delQuiz];
+    toast('Written Work deleted','ok');
+    render(state.page);
+  });
+}
+
+function renderCreateActivity(v, editing=null){
+  const a = editing || {title:'',description:'',maxScore:30,rubrics:[{criterion:'',points:''}],activityNumber:'',quarter:'1'};
+  if(!a.rubrics || !a.rubrics.length) a.rubrics = [{criterion:'',points:''}];
+  const myClasses = Object.entries(state.classes||{})
+    .filter(([cid,c])=>c.teacherUid===state.user.id && isActiveSYClass(c))
+    .map(([cid,c])=>({cid,...c}));
+  const preselectedCid = editing? editing.classId : state._ctxClassId;
+
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>${editing?'Edit':'Create'} Performance Task</h2><p>Build a performance task with clear rubrics.</p></div>
+    </div>
+    <div class="glass" style="padding:22px;max-width:780px">
+      <div class="field"><label>Assign to Class *</label>
+        <select class="select" id="aClass">
+          <option value="">— Select a class —</option>
+          ${myClasses.map(c=>`<option value="${c.cid}" ${c.cid===preselectedCid?'selected':''}>${esc(c.subject||'Subject')} — ${esc(c.section||'')}</option>`).join('')}
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="field"><label>Performance Task Number *</label>
+          <input class="input" id="aNum" placeholder="e.g., 1" value="${esc(a.activityNumber||'')}"></div>
+        <div class="field"><label>Quarter *</label>
+          <select class="select" id="aQuarter">
+            ${[1,2,3,4].map(n=>`<option value="${n}" ${String(a.quarter)===String(n)?'selected':''}>Quarter ${n}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Title *</label>
+        <input class="input" id="aTitle" placeholder="e.g., Research Paper on Renewable Energy" value="${esc(a.title)}"></div>
+      <div class="field"><label>Description / Instructions</label>
+        <textarea class="textarea" id="aDesc" placeholder="Describe the task...">${esc(a.description)}</textarea></div>
+      <div class="field"><label>Highest Possible Score *</label>
+        <input class="input" id="aMax" type="number" min="1" value="${a.maxScore}" style="max-width:180px"></div>
+      <div style="margin-top:8px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:6px;flex-wrap:wrap">
+          <div>
+            <label style="font-size:12px;font-weight:600;color:var(--ink-dim);letter-spacing:.04em;text-transform:uppercase">Rubrics</label>
+            <p class="faint" style="font-size:12px;margin:2px 0 0">Points total must exactly equal the HPS.</p>
+          </div>
+          <div id="rubSummary" style="padding:7px 12px;border-radius:10px;font-family:'Inter';font-weight:700;font-size:13.5px;border:1px solid var(--line);white-space:nowrap">
+            Total: <span id="rubTotal">0</span> / <span id="rubMax">${a.maxScore}</span>
+          </div>
+        </div>
+        <div id="rubList"></div>
+        <button class="btn sm ghost" id="addRubric">+ Add criterion</button>
+      </div>
+      <div class="modal-foot" style="justify-content:space-between;margin-top:22px;border-top:1px solid var(--line);padding-top:16px">
+        <button class="btn cancel" id="cancelBtn">Cancel</button>
+        <button class="btn primary" id="saveAct">${editing?'Save changes':'Create activity'}</button>
+      </div>
+    </div>`;
+
+  function updateSummary(){
+    const maxVal = parseFloat($('#aMax').value) || 0;
+    const total = a.rubrics.reduce((sum,r)=>sum + (parseFloat(r.points)||0), 0);
+    $('#rubMax').textContent = maxVal;
+    $('#rubTotal').textContent = total % 1 ? total.toFixed(2) : total;
+    const box = $('#rubSummary');
+    if(maxVal === 0){
+      box.style.background = '#fff7ed'; box.style.borderColor = 'var(--line-2)'; box.style.color = 'var(--ink-dim)';
+    } else if(Math.abs(total - maxVal) < 0.001){
+      box.style.background = 'linear-gradient(135deg,rgba(16,229,162,.18),rgba(59,130,246,.12))';
+      box.style.borderColor = 'rgba(16,229,162,.5)';
+      box.style.color = 'var(--ok)';
+      $('#rubTotal').textContent = (total % 1 ? total.toFixed(2) : total) + ' ✓';
+    } else {
+      box.style.background = 'linear-gradient(135deg,rgba(255,92,122,.15),rgba(251,191,36,.08))';
+      box.style.borderColor = 'rgba(255,92,122,.5)';
+      box.style.color = 'var(--err)';
+      const diff = total - maxVal;
+      $('#rubTotal').textContent = (total % 1 ? total.toFixed(2) : total) + (diff>0?` (over by ${diff % 1 ? diff.toFixed(2) : diff})`:` (short by ${Math.abs(diff) % 1 ? Math.abs(diff).toFixed(2) : Math.abs(diff)})`);
+    }
+  }
+  const renderRub = ()=>{
+    const list = $('#rubList');
+    list.innerHTML = a.rubrics.map((r,i)=>`
+      <div class="rubric-row">
+        <input class="input" placeholder="Criterion (e.g., Clarity)" value="${esc(r.criterion)}" data-i="${i}" data-k="criterion">
+        <input class="input" type="number" placeholder="Pts" value="${r.points??''}" data-i="${i}" data-k="points">
+        <button class="btn sm err" data-del="${i}">✕</button>
+      </div>`).join('');
+    list.querySelectorAll('input').forEach(inp=>{
+      inp.oninput = ()=>{ const i=+inp.dataset.i,k=inp.dataset.k; a.rubrics[i][k] = inp.value; if(k==='points') updateSummary(); };
+    });
+    list.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+      a.rubrics.splice(+b.dataset.del,1);
+      if(a.rubrics.length===0) a.rubrics.push({criterion:'',points:''});
+      renderRub(); updateSummary();
+    });
+  };
+  renderRub(); updateSummary();
+  $('#aMax').oninput = updateSummary;
+  $('#addRubric').onclick = ()=>{ a.rubrics.push({criterion:'',points:''}); renderRub(); updateSummary(); };
+  $('#cancelBtn').onclick = ()=>{ state._ctxClassId=null; state.page='classes'; renderNav(); render('classes'); };
+  $('#saveAct').onclick = async ()=>{
+    const classId = $('#aClass').value;
+    const activityNumber = $('#aNum').value.trim();
+    const quarter = $('#aQuarter').value;
+    const title = $('#aTitle').value.trim();
+    const desc = $('#aDesc').value.trim();
+    const maxScore = parseFloat($('#aMax').value);
+    if(!classId){ toast('Please assign this activity to a class','err'); return; }
+    if(!activityNumber){ toast('Performance Task number is required','err'); return; }
+    if(!quarter){ toast('Quarter is required','err'); return; }
+    if(!title){ toast('Title is required','err'); return; }
+    if(!maxScore||maxScore<=0){ toast('Max score must be > 0','err'); return; }
+    const cleanRubrics = a.rubrics.filter(r=>(r.criterion||'').trim() || r.points);
+    if(cleanRubrics.length===0){ toast('Add at least one rubric criterion','err'); return; }
+    for(const r of cleanRubrics){
+      if(!(r.criterion||'').trim()){ toast('Every rubric row needs a criterion name','err'); return; }
+      const pts = parseFloat(r.points);
+      if(isNaN(pts) || pts<=0){ toast('Every rubric row needs a positive point value','err'); return; }
+    }
+    const rubricTotal = cleanRubrics.reduce((s,r)=>s+(parseFloat(r.points)||0),0);
+    if(Math.abs(rubricTotal - maxScore) >= 0.001){
+      toast(`Rubric total (${rubricTotal}) must equal HPS (${maxScore})`,'err'); return;
+    }
+    const dupAct = Object.values(state.activities||{}).find(x=>
+      x.createdBy===state.user.id &&
+      x.classId===classId &&
+      String(x.quarter)===String(quarter) &&
+      String(x.activityNumber||'').trim().toLowerCase() === activityNumber.toLowerCase() &&
+      (!editing || x.id !== editing.id)
+    );
+    if(dupAct){ toast(`Activity number "${activityNumber}" already exists in this class for Q${quarter}`,'err'); return; }
+
+    const cls = state.classes[classId] || {};
+    const id = editing? editing.id : db.ref('activities').push().key;
+    const payload = {
+      id, title, description:desc, maxScore,
+      activityNumber, quarter,
+      classId, className:(cls.subject||'')+(cls.section?' — '+cls.section:''),
+      rubrics: cleanRubrics,
+      createdBy: editing? editing.createdBy : state.user.id,
+      createdByName: editing? editing.createdByName : state.user.name,
+      createdAt: editing? editing.createdAt : Date.now(),
+      updatedAt: Date.now()
+    };
+    try{
+      await db.ref('activities/'+id).set(payload);
+      state.activities = state.activities || {};
+      state.activities[id] = payload;
+      toast(editing?'Performance Task updated':'Performance Task created','ok');
+      state._ctxClassId=null;
+      state.page='classes'; renderNav(); render('classes');
+    }catch(err){ console.error(err); toast('Save failed: '+err.message,'err'); }
+  };
+}
+
+function openGradeModal(activityId){
+  const a = state.activities[activityId]; if(!a) return;
+  const subs = state.submissions?.[activityId]||{};
+  let students = Object.entries(state.students||{})
+    .filter(([code,s])=> (!a.classId || s.classId===_rosterCid(a.classId)) && isActiveSYStudent(s))
+    .map(([code,s])=>({code,...s}));
+  students.sort(_sortBySxName);
+  const className = a.className || 'Unassigned';
+  openModal(`
+    <div class="modal-head">
+      <div><h3>${esc(a.title)}</h3>
+        <p class="muted" style="font-size:12.5px;margin-top:2px">${esc(className)} · Activity ${esc(a.activityNumber||'—')} · Q${esc(a.quarter||'—')} · Max <b>${a.maxScore}</b></p>
+      </div>
+      <button class="close">✕</button>
+    </div>
+    ${students.length===0? `<div class="empty">No students in this class yet.</div>` : `
+      <input class="input" id="gFilter" placeholder="Search by name or code..." style="margin-bottom:10px">
+      <div id="gList" style="max-height:52vh;overflow-y:auto;padding-right:4px"></div>
+    `}
+  `,true);
+  if(students.length===0) return;
+  const renderList = (q='')=>{
+    const list = $('#gList');
+    const n = q.toLowerCase();
+    const visible = students.filter(s=>!n || (s.name||'').toLowerCase().includes(n) || (s.code||'').toString().toLowerCase().includes(n));
+    if(!visible.length){ list.innerHTML = `<div class="empty">No matches.</div>`; return; }
+    list.innerHTML = visible.map(s=>{
+      const r = subs[s.code] || {};
+      return `<div class="grade-row">
+        <div>
+          <div class="s-name">${esc(s.name||s.fullName||'—')}</div>
+          <div class="s-lrn">Code: ${esc(s.code)}${s.lrn?' · LRN '+esc(s.lrn):''}</div>
+        </div>
+        <input class="input" type="number" min="0" max="${a.maxScore}" step="0.01" placeholder="/${a.maxScore}" value="${r.score??''}" data-code="${s.code}" data-k="score">
+        <input class="input" placeholder="Feedback (optional)" value="${esc(r.feedback||'')}" data-code="${s.code}" data-k="feedback">
+        <button class="btn sm ok" data-save="${s.code}">Save</button>
+      </div>`;
+    }).join('');
+    list.querySelectorAll('[data-save]').forEach(b=>{
+      b.onclick = async ()=>{
+        const code = b.dataset.save;
+        const scoreI = list.querySelector(`input[data-code="${code}"][data-k="score"]`);
+        const fbI = list.querySelector(`input[data-code="${code}"][data-k="feedback"]`);
+        const score = parseFloat(scoreI.value);
+        if(isNaN(score)){ toast('Enter a numeric score','err'); return; }
+        if(score<0 || score>a.maxScore){ toast(`Score must be 0–${a.maxScore}`,'err'); return; }
+        const student = students.find(x=>x.code===code);
+        try{
+          await db.ref(`submissions/${activityId}/${code}`).set({
+            score, feedback:fbI.value.trim()||null,
+            studentName: student?.name||student?.fullName||null,
+            studentCode: code,
+            gradedBy: state.user.id, gradedByName: state.user.name, gradedAt: Date.now()
+          });
+          b.textContent='Saved ✓'; b.classList.remove('ok'); b.classList.add('ghost');
+          setTimeout(()=>{b.textContent='Save';b.classList.add('ok');b.classList.remove('ghost')},1400);
+          toast(`Saved score for ${student?.name||code}`,'ok');
+        }catch(err){ console.error(err); toast('Save failed','err'); }
+      };
+    });
+  };
+  renderList();
+  const f = $('#gFilter'); if(f) f.oninput = e=>renderList(e.target.value);
+}
+
+function openQuizEditor(quizId=null, prefClassId=null){
+  const existing = quizId? state.quizzes[quizId] : null;
+  const q = existing || {
+    quizNumber:'', date:new Date().toISOString().slice(0,10),
+    quarter:'1', description:'', maxScore:10,
+    classId: prefClassId || '',
+    wwType: 'quiz'
+  };
+  const curType = q.wwType || 'quiz';
+  const myClasses = Object.entries(state.classes||{})
+    .filter(([cid,c])=>c.teacherUid===state.user.id && isActiveSYClass(c))
+    .map(([cid,c])=>({cid,...c}));
+  openModal(`
+    <div class="modal-head">
+      <div><h3>${existing?'Edit':'New'} Written Work</h3>
+        <p class="muted" style="font-size:12.5px;margin-top:2px">Quizzes, Written Works, and Summative Tests all count toward the Written Works component of the grade.</p>
+      </div>
+      <button class="close">✕</button>
+    </div>
+    <div class="field"><label>Type *</label>
+      <select class="select" id="qType">
+        <option value="quiz" ${curType==='quiz'?'selected':''}>Quiz</option>
+        <option value="written_work" ${curType==='written_work'?'selected':''}>Written Work</option>
+        <option value="summative_test" ${curType==='summative_test'?'selected':''}>Summative Test</option>
+      </select>
+    </div>
+    <div class="field"><label>Assign to Class *</label>
+      <select class="select" id="qClass">
+        <option value="">— Select a class —</option>
+        ${myClasses.map(c=>`<option value="${c.cid}" ${c.cid===q.classId?'selected':''}>${esc(c.subject||'Subject')} — ${esc(c.section||'')}</option>`).join('')}
+      </select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div class="field"><label>Number *</label>
+        <input class="input" id="qNum" placeholder="e.g., 1" value="${esc(q.quizNumber)}"></div>
+      <div class="field"><label>Date *</label>
+        <input class="input" id="qDate" type="date" value="${esc(q.date)}"></div>
+      <div class="field"><label>Quarter *</label>
+        <select class="select" id="qQuarter">
+          ${[1,2,3,4].map(n=>`<option value="${n}" ${String(q.quarter)===String(n)?'selected':''}>Quarter ${n}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Topic / Coverage *</label>
+      <textarea class="textarea" id="qDesc" placeholder="e.g., Chapter 3 — Properties of Matter">${esc(q.description)}</textarea></div>
+    <div class="field"><label>Highest Possible Score *</label>
+      <input class="input" id="qMax" type="number" min="1" value="${q.maxScore}" style="max-width:180px"></div>
+    <div class="modal-foot">
+      ${existing?`<button class="btn err" id="qDel">Delete</button>`:''}
+      <button class="btn cancel close">Cancel</button>
+      <button class="btn primary" id="qSave">${existing?'Save changes':'Create'}</button>
+    </div>
+  `);
+  if(existing){
+    $('#qDel').onclick = async ()=>{
+      if(!(await confirmDialog({title:'Delete this written work?',message:'This will permanently remove the record and every student score tied to it. This action cannot be undone.',confirmText:'Delete',variant:'danger'}))) return;
+      await db.ref('quizzes/'+quizId).remove();
+      await db.ref('quizScores/'+quizId).remove();
+      toast('Deleted','ok'); closeModal();
+    };
+  }
+  $('#qSave').onclick = async ()=>{
+    const wwType = $('#qType').value;
+    const classId = $('#qClass').value;
+    const quizNumber = $('#qNum').value.trim();
+    const date = $('#qDate').value;
+    const quarter = $('#qQuarter').value;
+    const description = $('#qDesc').value.trim();
+    const maxScore = parseFloat($('#qMax').value);
+    const typeLabel = wwType==='quiz'?'Quiz':wwType==='written_work'?'Written Work':'Summative Test';
+    if(!classId){ toast('Please select a class','err'); return; }
+    if(!quizNumber){ toast(typeLabel+' number is required','err'); return; }
+    if(!date){ toast('Date is required','err'); return; }
+    if(!description){ toast('Topic / coverage is required','err'); return; }
+    if(!maxScore || maxScore<=0){ toast('HPS must be > 0','err'); return; }
+    const dupQuiz = Object.values(state.quizzes||{}).find(x=>
+      x.createdBy===state.user.id &&
+      x.classId===classId &&
+      String(x.quarter)===String(quarter) &&
+      (x.wwType||'quiz')===wwType &&
+      String(x.quizNumber).trim().toLowerCase() === quizNumber.toLowerCase() &&
+      (!existing || x.id !== existing.id)
+    );
+    if(dupQuiz){ toast(`${typeLabel} #${quizNumber} already exists in this class for Q${quarter}`,'err'); return; }
+
+    const cls = state.classes[classId] || {};
+    const id = existing? existing.id : db.ref('quizzes').push().key;
+    const payload = {
+      id, classId,
+      className:(cls.subject||'')+(cls.section?' — '+cls.section:''),
+      quizNumber, date, quarter, description, maxScore,
+      wwType,
+      createdBy: existing? existing.createdBy : state.user.id,
+      createdByName: existing? existing.createdByName : state.user.name,
+      createdAt: existing? existing.createdAt : Date.now(),
+      updatedAt: Date.now()
+    };
+    try{
+      await db.ref('quizzes/'+id).set(payload);
+      state.quizzes = state.quizzes || {};
+      state.quizzes[id] = payload;
+      toast(existing?typeLabel+' updated':typeLabel+' created','ok');
+      closeModal();
+      if(state.page) render(state.page);
+    }catch(err){ console.error(err); toast('Save failed: '+err.message,'err'); }
+  };
+}
+
+function openQuizGradeModal(quizId){
+  const q = state.quizzes[quizId]; if(!q) return;
+  const scores = state.quizScores?.[quizId] || {};
+  const students = Object.entries(state.students||{})
+    .filter(([code,s])=> (!q.classId || s.classId===_rosterCid(q.classId)) && isActiveSYStudent(s))
+    .map(([code,s])=>({code,...s}))
+    .sort(_sortBySxName);
+  openModal(`
+    <div class="modal-head">
+      <div><h3>${wwLabel(q)} ${esc(q.quizNumber)} — ${esc(q.className||'')}</h3>
+        <p class="muted" style="font-size:12.5px;margin-top:2px">Q${esc(q.quarter)} · ${esc(q.description)} · HPS <b>${q.maxScore}</b></p>
+      </div>
+      <button class="close">✕</button>
+    </div>
+    ${students.length===0? `<div class="empty">No students in this class.</div>` : `
+      <input class="input" id="qgFilter" placeholder="Search student..." style="margin-bottom:10px">
+      <div id="qgList" style="max-height:52vh;overflow-y:auto;padding-right:4px"></div>
+    `}
+  `,true);
+  if(students.length===0) return;
+  const renderList = (query='')=>{
+    const n = query.toLowerCase();
+    const visible = students.filter(s=>!n || (s.name||'').toLowerCase().includes(n) || (s.code||'').toString().toLowerCase().includes(n));
+    const list = $('#qgList');
+    if(!visible.length){ list.innerHTML = `<div class="empty">No matches.</div>`; return; }
+    list.innerHTML = visible.map(s=>{
+      const r = scores[s.code] || {};
+      return `<div class="grade-row" style="grid-template-columns:1fr 140px auto">
+        <div>
+          <div class="s-name">${esc(s.name||s.fullName||'—')}</div>
+          <div class="s-lrn">Code: ${esc(s.code)}${s.lrn?' · LRN '+esc(s.lrn):''}</div>
+        </div>
+        <input class="input" type="number" min="0" max="${q.maxScore}" step="0.01" placeholder="/${q.maxScore}" value="${r.score??''}" data-code="${s.code}">
+        <button class="btn sm ok" data-save="${s.code}">Save</button>
+      </div>`;
+    }).join('');
+    list.querySelectorAll('[data-save]').forEach(b=>{
+      b.onclick = async ()=>{
+        const code = b.dataset.save;
+        const scoreI = list.querySelector(`input[data-code="${code}"]`);
+        const score = parseFloat(scoreI.value);
+        if(isNaN(score)){ toast('Enter a numeric score','err'); return; }
+        if(score<0 || score>q.maxScore){ toast(`Score must be 0–${q.maxScore}`,'err'); return; }
+        const student = students.find(x=>x.code===code);
+        try{
+          await db.ref(`quizScores/${quizId}/${code}`).set({
+            score,
+            studentName: student?.name||student?.fullName||null,
+            studentCode: code,
+            gradedBy: state.user.id, gradedByName: state.user.name, gradedAt: Date.now()
+          });
+          b.textContent='Saved ✓'; b.classList.remove('ok'); b.classList.add('ghost');
+          setTimeout(()=>{b.textContent='Save';b.classList.add('ok');b.classList.remove('ghost')},1400);
+          toast(`Saved score for ${student?.name||code}`,'ok');
+        }catch(err){ console.error(err); toast('Save failed','err'); }
+      };
+    });
+  };
+  renderList();
+  $('#qgFilter').oninput = e=>renderList(e.target.value);
+}
+
+function _rosterCid(cid){const c=(state.classes||{})[cid]||{};return c.mapehParentId||cid}
+function _expandClassIds(ids){const out=new Set();(ids||[]).forEach(id=>{out.add(id);const c=(state.classes||{})[id]||{};const ch=c.mapehChildren||{};Object.values(ch).forEach(ccid=>{if(ccid)out.add(ccid)})});return [...out]}
+function studentClassIds(){
+  const direct = (state.user?.classIds && state.user.classIds.length) ? state.user.classIds : (state.user?.classId ? [state.user.classId] : []);
+  return _expandClassIds(direct);
+}
+function studentCodes(){
+  return (state.user?.codes && state.user.codes.length) ? state.user.codes : [state.user?.code].filter(Boolean);
+}
+
+function subjectsForStudent(){
+  const cids = studentClassIds();
+  const byClass = {};
+  Object.values(state.activities||{}).forEach(a=>{
+    if(!a.classId) return;
+    if(cids.length && !cids.includes(a.classId)) return;
+    if(!byClass[a.classId]) byClass[a.classId] = {activities:[], quizzes:[]};
+    byClass[a.classId].activities.push(a);
+  });
+  Object.values(state.quizzes||{}).forEach(q=>{
+    if(!q.classId) return;
+    if(cids.length && !cids.includes(q.classId)) return;
+    if(!byClass[q.classId]) byClass[q.classId] = {activities:[], quizzes:[]};
+    byClass[q.classId].quizzes.push(q);
+  });
+  cids.forEach(cid=>{ if(!byClass[cid]) byClass[cid] = {activities:[], quizzes:[]}; });
+  return byClass;
+}
+
+function applyQuarterFilter(items){
+  if(!state.quarterFilter || state.quarterFilter==='all') return items;
+  return items.filter(x=>String(x.quarter)===String(state.quarterFilter));
+}
+
+function quarterFilterBar(){
+  const qs = ['all','1','2','3','4'];
+  return `<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
+    <span class="faint" style="font-size:11.5px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin-right:4px">Quarter:</span>
+    ${qs.map(q=>`<button class="btn sm ${state.quarterFilter===q?'cyan':'ghost'}" data-qf="${q}">${q==='all'?'All':'Q'+q}</button>`).join('')}
+  </div>`;
+}
+function attachQuarterFilter(v){
+  v.querySelectorAll('[data-qf]').forEach(b=>b.onclick=()=>{
+    state.quarterFilter = b.dataset.qf;
+    render(state.page);
+  });
+}
+
+function renderStudentHome(v){
+  const codes = studentCodes();
+  const byClass = subjectsForStudent();
+  const subjectIds = Object.keys(byClass);
+  const totalActs = Object.values(byClass).reduce((s,x)=>s+x.activities.length,0);
+  const totalQzs = Object.values(byClass).reduce((s,x)=>s+x.quizzes.length,0);
+  const graded = Object.values(byClass).reduce((s,x)=> s
+    + x.activities.filter(a=>studentLookup(state.submissions?.[a.id], codes)).length
+    + x.quizzes.filter(q=>studentLookup(state.quizScores?.[q.id], codes)).length, 0);
+
+  v.innerHTML = `
+    <div class="page-head">
+      <div>
+        <h2>Hello, ${esc(state.user.name.split(' ')[0])} 👋</h2>
+        <p>Your subjects, activities, and quizzes — all in one place.</p>
+      </div>
+    </div>
+    <div class="stats">
+      ${statCard(subjectIds.length,'Subjects','#f97316')}
+      ${statCard(totalActs+totalQzs,'Total Items','#3b82f6')}
+      ${statCard(graded,'Graded','#10e5a2')}
+      ${statCard((totalActs+totalQzs)-graded,'Pending','#fbbf24')}
+    </div>
+    ${quarterFilterBar()}
+    ${subjectIds.length===0? emptyBlock('No subjects yet','Your teachers haven\'t posted any work for your class yet.') :
+      subjectIds.map(cid=>{
+        const cls = state.classes?.[cid] || {};
+        const data = byClass[cid];
+        const acts = applyQuarterFilter(data.activities);
+        const qzs = applyQuarterFilter(data.quizzes);
+        const totalHere = acts.length + qzs.length;
+        let sEarned = 0, sMax = 0, sGraded = 0;
+        acts.forEach(a=>{ const sub = studentLookup(state.submissions?.[a.id], codes); if(sub){ sEarned+=sub.score; sMax+=a.maxScore; sGraded++; } });
+        qzs.forEach(q=>{ const sc = studentLookup(state.quizScores?.[q.id], codes); if(sc){ sEarned+=sc.score; sMax+=q.maxScore; sGraded++; } });
+        const sPct = sMax? ((sEarned/sMax)*100).toFixed(1) : null;
+        const gradedPct = totalHere? Math.round((sGraded/totalHere)*100) : 0;
+        const byQuarter = {1:{a:[],q:[]},2:{a:[],q:[]},3:{a:[],q:[]},4:{a:[],q:[]}};
+        acts.forEach(a=>{ const n = parseInt(a.quarter)||0; if(byQuarter[n]) byQuarter[n].a.push(a); });
+        qzs.forEach(q=>{ const n = parseInt(q.quarter)||0; if(byQuarter[n]) byQuarter[n].q.push(q); });
+        return `<div class="subject-block">
+          <div class="subject-head" style="flex-direction:column;align-items:stretch;gap:12px;padding:16px 18px">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <h3 style="font-size:17px;flex:1;min-width:0">📚 ${esc(cls.subject||'Subject')}</h3>
+              ${sPct!==null?`<div class="score-pill" style="font-size:13px;padding:5px 12px">${sPct}%</div>`:''}
+            </div>
+            <div class="muted" style="font-size:12px;display:flex;flex-wrap:wrap;gap:10px">
+              <span>${esc(cls.section||'')}${cls.schoolYear?' · SY '+esc(cls.schoolYear):''}</span>
+              <span>•</span>
+              <span>${totalHere} item${totalHere===1?'':'s'}</span>
+              <span>•</span>
+              <span>${sGraded} graded</span>
+              ${sMax?`<span>•</span><span>${sEarned} / ${sMax} pts</span>`:''}
+            </div>
+            <div style="height:6px;border-radius:3px;background:#fff7ed;overflow:hidden">
+              <div style="height:100%;width:${gradedPct}%;background:linear-gradient(90deg,#f97316,#3b82f6,#10e5a2);border-radius:3px;transition:width .6s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 12px rgba(249,115,22,.5)"></div>
+            </div>
+          </div>
+          ${totalHere===0?`<div class="muted" style="font-size:13px;padding:10px 4px">No items for this filter.</div>`:
+          [1,2,3,4].map(n=>{
+            const g = byQuarter[n];
+            g.a.sort((x,y)=>numSort(x.activityNumber,y.activityNumber));
+            g.q.sort((x,y)=>numSort(x.quizNumber,y.quizNumber));
+            if(g.a.length+g.q.length===0) return '';
+            return `<div class="quarter-label">Quarter ${n}</div>
+              <div class="table-wrap" style="margin-bottom:10px"><table class="data"><thead><tr>
+                <th>Type</th><th>#</th><th>Title / Topic</th><th>HPS</th><th>Score</th>
+              </tr></thead><tbody>
+              ${g.a.map(a=>{
+                const sub = studentLookup(state.submissions?.[a.id], codes);
+                return `<tr data-view-act="${a.id}" style="cursor:pointer">
+                  <td><span class="type-badge act">Perf. Task</span></td>
+                  <td><b>${esc(a.activityNumber||'—')}</b></td>
+                  <td>${esc(a.title)}</td>
+                  <td>${a.maxScore}</td>
+                  <td>${sub?`<span class="score-pill">${sub.score}/${a.maxScore}</span>`:`<span class="pill" style="border-color:rgba(251,191,36,.4);color:var(--warn)">Pending</span>`}</td>
+                </tr>`;
+              }).join('')}
+              ${g.q.map(qz=>{
+                const s = studentLookup(state.quizScores?.[qz.id], codes);
+                return `<tr>
+                  <td><span class="type-badge qz">${wwLabelShort(qz)}</span></td>
+                  <td><b>${esc(qz.quizNumber)}</b></td>
+                  <td>${esc(qz.description||'—')}<div class="muted" style="font-size:11px">${fmtD(qz.date)}</div></td>
+                  <td>${qz.maxScore}</td>
+                  <td>${s?`<span class="score-pill">${s.score}/${qz.maxScore}</span>`:`<span class="pill" style="border-color:rgba(251,191,36,.4);color:var(--warn)">Pending</span>`}</td>
+                </tr>`;
+              }).join('')}
+              </tbody></table></div>`;
+          }).join('')}
+        </div>`;
+      }).join('')}`;
+  attachQuarterFilter(v);
+  v.querySelectorAll('[data-view-act]').forEach(r=>r.onclick=()=>openActivityDetail(r.dataset.viewAct));
+}
+
+function renderStudentCombinedOverview(v){
+  const codes = studentCodes();
+  const cids = studentClassIds();
+  const allActs = applyQuarterFilter(Object.values(state.activities||{}).filter(a=>!cids.length || cids.includes(a.classId)));
+  const allQzs  = applyQuarterFilter(Object.values(state.quizzes||{}).filter(q=>!cids.length || cids.includes(q.classId)));
+  const byQuarter = {1:{a:[],q:[]},2:{a:[],q:[]},3:{a:[],q:[]},4:{a:[],q:[]}};
+  allActs.forEach(a=>{ const n=parseInt(a.quarter)||0; if(byQuarter[n]) byQuarter[n].a.push(a); });
+  allQzs.forEach(q=>{ const n=parseInt(q.quarter)||0; if(byQuarter[n]) byQuarter[n].q.push(q); });
+
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>Overview</h2><p>All activities and quizzes across your subjects, sorted by quarter and number.</p></div>
+    </div>
+    <div class="stats">
+      ${statCard(allActs.length,'Performance','#f97316')}
+      ${statCard(allQzs.length,'Written Works','#3b82f6')}
+    </div>
+    ${quarterFilterBar()}
+    ${[1,2,3,4].map(n=>{
+      const g = byQuarter[n];
+      g.a.sort((x,y)=>numSort(x.activityNumber,y.activityNumber));
+      g.q.sort((x,y)=>numSort(x.quizNumber,y.quizNumber));
+      if(g.a.length+g.q.length===0) return '';
+      return `<div class="glass" style="padding:16px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <h3 style="font-size:16px">Quarter ${n}</h3>
+          <span class="pill">${g.a.length+g.q.length} items</span>
+        </div>
+        <div class="table-wrap"><table class="data"><thead><tr>
+          <th>Type</th><th>#</th><th>Subject</th><th>Title / Topic</th><th>Teacher</th><th>Score</th>
+        </tr></thead><tbody>
+        ${g.a.map(a=>{
+          const sub = studentLookup(state.submissions?.[a.id], codes);
+          return `<tr data-view-act="${a.id}" style="cursor:pointer">
+            <td><span class="type-badge act">Perf. Task</span></td>
+            <td><b>${esc(a.activityNumber||'—')}</b></td>
+            <td><b>${esc(a.className||'—')}</b></td>
+            <td>${esc(a.title)}</td>
+            <td class="muted">${esc(a.createdByName||'—')}</td>
+            <td>${sub?`<span class="score-pill">${sub.score}/${a.maxScore}</span>`:`<span class="pill" style="border-color:rgba(251,191,36,.4);color:var(--warn)">Pending</span>`}</td>
+          </tr>`;
+        }).join('')}
+        ${g.q.map(qz=>{
+          const s = studentLookup(state.quizScores?.[qz.id], codes);
+          return `<tr>
+            <td><span class="type-badge qz">${wwLabelShort(qz)}</span></td>
+            <td><b>${esc(qz.quizNumber)}</b></td>
+            <td><b>${esc(qz.className||'—')}</b></td>
+            <td>${esc(qz.description||'—')}</td>
+            <td class="muted">${esc(qz.createdByName||'—')}</td>
+            <td>${s?`<span class="score-pill">${s.score}/${qz.maxScore}</span>`:`<span class="pill" style="border-color:rgba(251,191,36,.4);color:var(--warn)">Pending</span>`}</td>
+          </tr>`;
+        }).join('')}
+        </tbody></table></div>
+      </div>`;
+    }).join('')}
+    ${(allActs.length+allQzs.length===0) ? emptyBlock('No items','Nothing matches this filter.') : ''}
+  `;
+  attachQuarterFilter(v);
+  v.querySelectorAll('[data-view-act]').forEach(r=>r.onclick=()=>openActivityDetail(r.dataset.viewAct));
+}
+
+function renderStudentActivities(v){
+  const codes = studentCodes();
+  const byClass = subjectsForStudent();
+  const subjectIds = Object.keys(byClass).filter(cid=>byClass[cid].activities.length>0);
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>My Activities</h2><p>All performance tasks, organized by subject.</p></div>
+    </div>
+    ${quarterFilterBar()}
+    ${subjectIds.length===0? emptyBlock('No activities yet','') :
+      subjectIds.map(cid=>{
+        const cls = state.classes?.[cid] || {};
+        const acts = applyQuarterFilter(byClass[cid].activities).slice().sort((a,b)=>(parseInt(a.quarter||0)-parseInt(b.quarter||0)) || numSort(a.activityNumber,b.activityNumber));
+        if(acts.length===0) return '';
+        return `<div class="subject-block">
+          <div class="subject-head">
+            <h3>📚 ${esc(cls.subject||'Subject')}</h3>
+            <span class="meta">${esc(cls.section||'')} · ${acts.length} activit${acts.length===1?'y':'ies'}</span>
+          </div>
+          <div class="cards-grid">
+            ${acts.map(a=>{
+              const sub = studentLookup(state.submissions?.[a.id], codes);
+              return activityCard(a,{student:true,sub});
+            }).join('')}
+          </div>
+        </div>`;
+      }).join('')}`;
+  attachQuarterFilter(v);
+  attachActivityCardHandlers();
+}
+
+function renderStudentQuizzesPage(v){
+  const codes = studentCodes();
+  const byClass = subjectsForStudent();
+  const subjectIds = Object.keys(byClass).filter(cid=>byClass[cid].quizzes.length>0);
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>My Quizzes</h2><p>All quizzes, organized by subject.</p></div>
+    </div>
+    ${quarterFilterBar()}
+    ${subjectIds.length===0? emptyBlock('No quizzes yet','') :
+      subjectIds.map(cid=>{
+        const cls = state.classes?.[cid] || {};
+        const quizzes = applyQuarterFilter(byClass[cid].quizzes).slice().sort((a,b)=>(parseInt(a.quarter||0)-parseInt(b.quarter||0)) || numSort(a.quizNumber,b.quizNumber));
+        if(quizzes.length===0) return '';
+        return `<div class="subject-block">
+          <div class="subject-head">
+            <h3>📚 ${esc(cls.subject||'Subject')}</h3>
+            <span class="meta">${esc(cls.section||'')} · ${quizzes.length} quiz${quizzes.length===1?'':'zes'}</span>
+          </div>
+          <div class="table-wrap"><table class="data"><thead><tr>
+            <th>WW #</th><th>Q</th><th>Date</th><th>Topic / Coverage</th><th>Teacher</th><th>HPS</th><th>Score</th>
+          </tr></thead><tbody>
+          ${quizzes.map(q=>{
+            const s = studentLookup(state.quizScores?.[q.id], codes);
+            return `<tr>
+              <td><b>${esc(q.quizNumber)}</b></td>
+              <td><span class="pill">Q${esc(q.quarter||'—')}</span></td>
+              <td class="muted">${fmtD(q.date)}</td>
+              <td class="muted">${esc(q.description||'—')}</td>
+              <td class="muted">${esc(q.createdByName||'—')}</td>
+              <td>${q.maxScore}</td>
+              <td>${s?`<span class="score-pill">${s.score}/${q.maxScore}</span>`:`<span class="pill" style="border-color:rgba(251,191,36,.4);color:var(--warn)">Pending</span>`}</td>
+            </tr>`;
+          }).join('')}
+          </tbody></table></div>
+        </div>`;
+      }).join('')}`;
+  attachQuarterFilter(v);
+}
+
+function renderStudentScores(v){
+  const codes = studentCodes();
+  const cids = studentClassIds();
+  const actRows = [], qzRows = [];
+  let total = 0, max = 0;
+  Object.values(state.activities||{}).forEach(a=>{
+    if(cids.length && a.classId && !cids.includes(a.classId)) return;
+    const sub = studentLookup(state.submissions?.[a.id], codes);
+    if(sub){ actRows.push({a,sub}); total+=sub.score; max+=a.maxScore; }
+  });
+  Object.values(state.quizzes||{}).forEach(q=>{
+    if(cids.length && q.classId && !cids.includes(q.classId)) return;
+    const sc = studentLookup(state.quizScores?.[q.id], codes);
+    if(sc){ qzRows.push({q,sc}); total+=sc.score; max+=q.maxScore; }
+  });
+  actRows.sort((x,y)=>(y.sub.gradedAt||0)-(x.sub.gradedAt||0));
+  qzRows.sort((x,y)=>(y.sc.gradedAt||0)-(x.sc.gradedAt||0));
+  const pct = max? ((total/max)*100).toFixed(1) : 0;
+  v.innerHTML = `
+    <div class="page-head">
+      <div><h2>My Scores</h2><p>All graded work across every subject.</p></div>
+    </div>
+    <div class="stats">
+      ${statCard(actRows.length+qzRows.length,'Graded Items','#f97316')}
+      ${statCard(`${total}/${max}`,'Total Points','#3b82f6')}
+      ${statCard(pct+'%','Overall','#10e5a2')}
+    </div>
+    <h3 style="margin:22px 0 10px;font-size:16px">Activities</h3>
+    ${actRows.length===0? `<div class="glass" style="padding:24px;text-align:center;color:var(--ink-faint);font-size:13px">No graded activities yet.</div>` :
+    `<div class="table-wrap"><table class="data"><thead><tr>
+      <th>Subject</th><th>Activity</th><th>Score</th><th>Feedback</th><th>Graded</th><th></th>
+    </tr></thead><tbody>
+    ${actRows.map(({a,sub})=>`<tr>
+      <td><b>${esc(a.className||'—')}</b></td>
+      <td>${a.activityNumber?'Act '+esc(a.activityNumber)+' · ':''}${a.quarter?'Q'+esc(a.quarter)+' · ':''}${esc(a.title)}<div class="muted" style="font-size:11.5px">${esc(a.createdByName||'—')}</div></td>
+      <td><span class="score-pill">${sub.score}/${a.maxScore}</span></td>
+      <td class="muted">${esc(sub.feedback||'—')}</td>
+      <td class="muted">${fmtDate(sub.gradedAt)}</td>
+      <td><button class="btn sm ghost" data-view="${a.id}">View</button></td>
+    </tr>`).join('')}
+    </tbody></table></div>`}
+    <h3 style="margin:22px 0 10px;font-size:16px">Quizzes</h3>
+    ${qzRows.length===0? `<div class="glass" style="padding:24px;text-align:center;color:var(--ink-faint);font-size:13px">No quiz scores yet.</div>` :
+    `<div class="table-wrap"><table class="data"><thead><tr>
+      <th>Subject</th><th>WW #</th><th>Date</th><th>Q</th><th>Topic</th><th>Score</th>
+    </tr></thead><tbody>
+    ${qzRows.map(({q,sc})=>`<tr>
+      <td><b>${esc(q.className||'—')}</b></td>
+      <td><b>${esc(q.quizNumber)}</b></td>
+      <td class="muted">${fmtD(q.date)}</td>
+      <td><span class="pill">Q${esc(q.quarter||'—')}</span></td>
+      <td class="muted">${esc(q.description||'—')}</td>
+      <td><span class="score-pill">${sc.score}/${q.maxScore}</span></td>
+    </tr>`).join('')}
+    </tbody></table></div>`}
+  `;
+  v.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>openActivityDetail(b.dataset.view));
+}
+
+function openActivityDetail(id){
+  const a = state.activities[id]; if(!a) return;
+  const isOwner = state.role==='teacher' && a.createdBy===state.user.id;
+  const isAdmin = state.role==='admin';
+  const sub = state.role==='student' ? state.submissions?.[id]?.[state.user.code] : null;
+  const rubricHTML = (a.rubrics||[]).length? (a.rubrics||[]).map(r=>
+    `<div class="rubric-display"><span>${esc(r.criterion||'—')}</span><span class="pts">${esc(r.points||'—')} pts</span></div>`
+  ).join('') : '<p class="faint" style="font-size:13px">No rubric provided.</p>';
+
+  openModal(`
+    <div class="modal-head">
+      <div><h3>${esc(a.title)}</h3>
+        <p class="muted" style="font-size:12.5px;margin-top:2px">${a.activityNumber?'Activity '+esc(a.activityNumber)+' · ':''}${a.quarter?'Q'+esc(a.quarter)+' · ':''}by ${esc(a.createdByName||'—')} · ${fmtDate(a.createdAt)}</p>
+      </div>
+      <button class="close">✕</button>
+    </div>
+    <div class="field"><label>Description</label>
+      <div class="glass" style="padding:14px;font-size:13.5px;line-height:1.55">${esc(a.description||'—').replace(/\n/g,'<br>')}</div>
+    </div>
+    <div class="field"><label>Rubrics · Max ${a.maxScore}</label>${rubricHTML}</div>
+    ${a.className?`<div class="field"><label>Subject</label><div>${esc(a.className)}</div></div>`:''}
+    ${sub? `<div class="fb-block">
+       <div class="h">Your Score</div>
+       <div style="font-size:24px;font-weight:800;font-family:'Inter'" class="grad-text">${sub.score}/${a.maxScore}</div>
+       ${sub.feedback? `<div style="margin-top:10px;font-size:13px"><b>Teacher feedback:</b><br>${esc(sub.feedback).replace(/\n/g,'<br>')}</div>`:''}
+       <div class="muted" style="font-size:11.5px;margin-top:8px">Graded ${fmtDate(sub.gradedAt)}${sub.gradedByName?' by '+esc(sub.gradedByName):''}</div>
+    </div>`:''}
+    <div class="modal-foot">
+      ${isOwner?`<button class="btn err" id="delAct">Delete</button><button class="btn cyan" id="editAct">Edit</button><button class="btn primary" id="gradeAct">Grade Students</button>`:''}
+      ${isAdmin?`<button class="btn err" id="delAct">Delete</button>`:''}
+      <button class="btn cancel close">Close</button>
+    </div>
+  `,true);
+  const del = $('#delAct'); if(del) del.onclick = async ()=>{
+    if(!(await confirmDialog({title:'Delete activity?',message:'This will permanently remove the activity and every submission linked to it. This action cannot be undone.',confirmText:'Delete activity',variant:'danger'}))) return;
+    await db.ref('activities/'+id).remove();
+    await db.ref('submissions/'+id).remove();
+    toast('Performance Task deleted','ok'); closeModal();
+  };
+  const ed = $('#editAct'); if(ed) ed.onclick = ()=>{ closeModal(); setTimeout(()=>{ state.page='create'; renderNav(); renderCreateActivity($('#mainView'),a); },380); };
+  const gr = $('#gradeAct'); if(gr) gr.onclick = ()=>{ closeModal(); setTimeout(()=>openGradeModal(id),380); };
+}
+
+$('#logoutBtn').onclick = async ()=>{
+  clearSession();
+  try{ localStorage.removeItem('cnhsHubSession'); }catch(e){}
+  try{ await auth.signOut(); }catch(e){}
+  setTimeout(()=>{location.href='index.html';},220);
+};
+db.ref('.info/connected').on('value',s=>{
+  $('#connStatus').textContent = s.val()?'Online':'Reconnecting…';
+});
+
+const installBtn = $('#installBtn');
+if(installBtn){ installBtn.style.display='none'; }
+
+function showInstallHelp(){}
+
+
+window.addEventListener('load',()=>{
+  setTimeout(()=>{ const sp = $('#splash'); if(sp){ sp.classList.add('hide'); setTimeout(()=>sp.remove(),600); } },450);
+  // Hydrate cached GAP logo from localStorage immediately
+  try{
+    let cached=localStorage.getItem('GAP_logo');
+    if(cached&&/drive\.google\.com\/uc\?/.test(cached)){const m=cached.match(/[?&]id=([a-zA-Z0-9_-]+)/);if(m){cached='https://lh3.googleusercontent.com/d/'+m[1]+'=w1200';try{localStorage.setItem('GAP_logo',cached)}catch(e){}}}
+    document.querySelectorAll('[data-gap-logo]').forEach(el=>{if(cached){el.src=cached;el.style.display=''}else{el.style.display='none'}});
+    document.querySelectorAll('[data-replace-on-logo]').forEach(el=>{el.style.display=cached?'none':''});
+  }catch(e){}
+});
+if(document.readyState==='complete'){
+  setTimeout(()=>{ const sp=$('#splash'); if(sp){sp.classList.add('hide');setTimeout(()=>sp.remove(),600)} },200);
+}
+
+(function restoreSession(){
+  const saved = loadSession();
+  let hub = null;
+  try{ const r = localStorage.getItem('cnhsHubSession'); if(r) hub = JSON.parse(r); }catch(e){}
+  if(!saved && hub && hub.role==='student' && hub.code){
+    const st = document.querySelector('.role-tab[data-role="student"]');
+    if(st){ document.querySelectorAll('.role-tab').forEach(t=>t.classList.remove('active')); st.classList.add('active'); $('#studentForm').classList.remove('hidden'); $('#staffForm').classList.add('hidden'); }
+    const inp = $('#studentCode'); if(inp){ inp.value = hub.code; setTimeout(()=>$('#studentLoginBtn').click(),320); }
+    return;
+  }
+  if(!saved && hub && (hub.role==='teacher'||hub.role==='admin')){
+    const role = hub.role;
+    const tab = document.querySelector('.role-tab[data-role="'+role+'"]');
+    if(tab){ document.querySelectorAll('.role-tab').forEach(t=>t.classList.remove('active')); tab.classList.add('active'); $('#studentForm').classList.add('hidden'); $('#staffForm').classList.remove('hidden'); $('#staffForm').dataset.role = role; }
+    let settled=false;
+    const to=setTimeout(()=>{settled=true;},4000);
+    const unsub=auth.onAuthStateChanged(async u=>{
+      if(settled) return; settled=true; clearTimeout(to); unsub();
+      if(u && !u.isAnonymous){
+        await ensureUserDoc(u);
+        const r = await loadUserRole(u.uid);
+        const isAdmin = r === 'admin';
+        let profile=null;
+        try{ const t=await db.ref('teachers/'+u.uid).get(); if(t.exists()) profile=t.val(); }catch(e){}
+        state.role = isAdmin ? 'admin' : 'teacher';
+        state.user = { id:u.uid, name: profile?.name||profile?.fullName||u.displayName||hub.name||(isAdmin?'Administrator':(u.email||'').split('@')[0]), email:u.email||'' };
+        saveSession();
+        enterApp();
+      } else {
+        location.href = 'index.html';
+      }
+    });
+    return;
+  }
+  if(!saved) return;
+  if(saved.role === 'student'){
+    state.role = saved.role;
+    state.user = saved.user;
+    enterApp();
+    return;
+  }
+  let settled = false;
+  const timeout = setTimeout(()=>{
+    if(settled) return;
+    settled = true;
+    clearSession();
+  },3000);
+  const unsub = auth.onAuthStateChanged(async u=>{
+    if(settled) return;
+    settled = true;
+    clearTimeout(timeout);
+    unsub();
+    if(u && !u.isAnonymous && u.uid === saved.user.id){
+      await ensureUserDoc(u);
+      await loadUserRole(u.uid);
+      state.role = saved.role;
+      state.user = saved.user;
+      enterApp();
+    } else {
+      clearSession();
+      location.href = 'index.html';
+    }
+  });
+})();
+})();
+</script>
+</body>
+</html>
